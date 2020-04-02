@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_background"
+    tools:context=".TitleScreen">
+
+    <FrameLayout
+        android:layout_width="356dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="76dp"
+        android:background="@color/transparentBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.457"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/orbitron"
+            android:text="Algo Rhythm"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="304dp"
+        android:layout_height="186dp"
+        android:layout_marginBottom="80dp"
+        android:background="@color/transparentBlue"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparentBlue" />
+
+        <LinearLayout
+            android:layout_width="287dp"
+            android:layout_height="183dp"
+            android:layout_marginBottom="84dp"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <Button
+                android:id="@+id/playButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/brightBlue"
+                android:fontFamily="@font/orbitron"
+                android:onClick="goToSongSelect"
+                android:text="Play"
+                android:textAllCaps="false" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <Button
+                android:id="@+id/importSongButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/brightBlue"
+                android:fontFamily="@font/orbitron"
+                android:onClick="goToImportSong"
+                android:text="Import Song"
+                android:textAllCaps="false" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <Button
+                    android:id="@+id/storeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/brightBlue"
+                    android:fontFamily="@font/orbitron"
+                    android:text="Store"
+                    android:textAllCaps="false" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/settingsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/brightBlue"
+                    android:fontFamily="@font/orbitron"
+                    android:onClick="goToSettings"
+                    android:text="Settings"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparentBlue"
+            android:foreground="@color/transparentBlue" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
