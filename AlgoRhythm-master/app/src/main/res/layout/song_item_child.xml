@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="left"
+    android:layoutDirection="ltr">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="75"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/highscore_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="TextView"
+                android:fontFamily="@font/orbitron"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/combo_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:fontFamily="@font/orbitron"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/rank_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_weight="25"
+            android:textColor="#FFFFFF"
+            android:text="Z"
+            android:fontFamily="@font/orbitron"
+            android:paddingRight="10dp"
+            android:textSize="28dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/brightBlue"
+        android:fontFamily="@font/orbitron"
+        android:textColor="#FFFFFF"
+        android:paddingBottom="10dp"
+        android:layout_weight="1"
+        android:text="Start" />
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="match_parent"
+        android:background="@color/paleBlue"
+        android:layout_height="35dp"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/orbitron"
+        android:layout_gravity="fill"
+        android:text="Delete" />
+</LinearLayout>
