@@ -52,7 +52,7 @@ public class SongSelect extends AppCompatActivity  {
         // create ArrayList of courses from database
         if(jobItems == null) {
             jobItems = new ArrayList<SongItem>();
-            jobItems.add(new SongItem("heh", 2, "1:01"));
+            jobItems.add(new SongItem("Sea Shanty 2", 2, "1:01"));
             jobItems.add(new SongItem("through the fire and the flames 2", 4, "1:01"));
         }
         // make array adapter to bind arraylist to listview with new custom item layout
