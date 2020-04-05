@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../Algo Rhythm.iml" filepath="$PROJECT_DIR$/../Algo Rhythm.iml" group="Algo Rhythm" />
+      <module fileurl="file://$PROJECT_DIR$/../AlgoRhythm-master-Algo Rhythm.iml" filepath="$PROJECT_DIR$/../AlgoRhythm-master-Algo Rhythm.iml" group="Algo Rhythm" />
+      <module fileurl="file://$PROJECT_DIR$/AlgoRhythm-master-app.iml" filepath="$PROJECT_DIR$/AlgoRhythm-master-app.iml" group="Algo Rhythm/app" />
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" group="Algo Rhythm/app" />
     </modules>
   </component>
