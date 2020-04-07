@@ -54,7 +54,8 @@ public class Game extends AppCompatActivity {
     private MediaPlayer mp;
     private TreeMap<Integer, Character> notes;
     private int currentNote;
-
+    static int newNote;
+    static char newNoteType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,10 +181,11 @@ public class Game extends AppCompatActivity {
     private void NoteTimer (TreeMap<Integer, Character> notes) {
 
         //Timer timer = new Timer();
-
+        newNote = 0;
         final Runnable noteMove = new Runnable() {
             public void run() {
-                createNote('t', 2);
+                newNote++;
+                createNote(newNoteType, newNote);
             }
         };
         Timer timer = new Timer();
@@ -193,6 +195,7 @@ public class Game extends AppCompatActivity {
                     new java.util.TimerTask() {
                         @Override
                         public void run() {
+                            newNoteType = entree.getValue();
                             runOnUiThread(noteMove);
                         }
                     }, entry.getKey());
