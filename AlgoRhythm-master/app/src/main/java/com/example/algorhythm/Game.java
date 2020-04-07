@@ -12,7 +12,10 @@ import android.os.Bundle;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +57,7 @@ public class Game extends AppCompatActivity {
     private MediaPlayer mp;
     private TreeMap<Integer, Character> notes;
     private int currentNote;
+    private ArrayDeque<Integer> nutes;
     static int newNote;
     static char newNoteType;
     @Override
@@ -63,10 +67,11 @@ public class Game extends AppCompatActivity {
 
 
         et_what = (TextView) findViewById(R.id.songName);
+        nutes = new ArrayDeque<Integer>();
 
         launcher = getIntent();
 
-        et_what.setText(launcher.getStringExtra("name"));
+        //et_what.setText(launcher.getStringExtra("name"));
 
         String[] times = (launcher.getStringExtra("length")).split(":");
         time = Integer.parseInt(times[1]) * 1000;
@@ -93,15 +98,17 @@ public class Game extends AppCompatActivity {
         }
 
         name = launcher.getStringExtra("name");
+        TextView sung = (TextView) findViewById(R.id.songName);
+        sung.setText(name);
         name = name.toLowerCase();
         name = name.replace(" ", "_");
-        et_what.setText(Integer.toString(time));
+        //et_what.setText(Integer.toString(time));
         try {
             int resource = getResources().getIdentifier(name, "raw", getPackageName());
 
             playSong(0, time, resource, notes);
         } catch (Exception e) {
-            et_what.setText("Error");
+            //et_what.setText("Error");
         }
 
 
@@ -111,10 +118,10 @@ public class Game extends AppCompatActivity {
 
 
 
-        Button button = findViewById(R.id.button2);
 
 
-        button.setOnClickListener(new View.OnClickListener() {
+
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //((Button) v).setText("" + v.getTranslationY());
@@ -128,6 +135,8 @@ public class Game extends AppCompatActivity {
             }
         });
 
+
+
         button.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
@@ -137,18 +146,29 @@ public class Game extends AppCompatActivity {
                 if (event.getAction() == DragEvent.ACTION_DRAG_STARTED ||
                 event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
                     ((Button) v).setText("Dragged.");
-                }*/
+                }
 
                 System.out.println("test");
                 return true;
             }
-        });
+        });*/
 
 
     //createNote('t', 100);
 
+        ImageView goZone = findViewById(R.id.goZone);
+        goZone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!nutes.isEmpty()) {
+                    removeNote(nutes.peek());
+                }
+            }
+        });
+
 
     }
+
 
     private void playSong(int delay, int time, int song, TreeMap<Integer, Character> notes) {
         final int nestedsong = song;
@@ -275,11 +295,12 @@ public class Game extends AppCompatActivity {
         animation.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
-
+                nutes.add(noteNumber);
             }
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                nutes.poll();
                 removeNote(noteNumber);
             }
 
@@ -300,11 +321,15 @@ public class Game extends AppCompatActivity {
     }
 
     public void removeNote(int noteNumber){
-        ImageView note = (ImageView)findViewById(noteNumber);
-        note.setVisibility(View.GONE);
-        ConstraintLayout parentLayout = (ConstraintLayout)findViewById(R.id.ConstraintLayout);
-        parentLayout.removeView(note);
-        //removeView(note);
+        try {
+            ImageView note = (ImageView) findViewById(noteNumber);
+            note.setVisibility(View.GONE);
+            ConstraintLayout parentLayout = (ConstraintLayout) findViewById(R.id.ConstraintLayout);
+            parentLayout.removeView(note);
+            //removeView(note);
+        } catch (Exception e) {
+            //whatever
+        }
 
     }
 }
