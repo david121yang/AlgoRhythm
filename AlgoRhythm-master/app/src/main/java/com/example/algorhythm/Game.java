@@ -74,8 +74,7 @@ public class Game extends AppCompatActivity {
             int noteCount = Integer.parseInt(reader.readLine());
             int currentTime = 0;
             for(int i = 0; i < noteCount; i++) {
-                String[] fields = reader.readLine().split(":");
-                fields = reader.readLine().split(" ");
+                String[] fields = reader.readLine().split(" ");
                 float timestamp = Float.parseFloat(fields[0]);
                 char noteType = fields[1].charAt(0);
                 if(noteType == 'h') {
@@ -175,7 +174,7 @@ public class Game extends AppCompatActivity {
                 public void run() {
                     Log.d("pen",entree.getValue()+"is");
                 }
-            }, entry.getKey() * 1000);
+            }, entry.getKey());
         }
     }
 
