@@ -22,6 +22,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.MenuItem;
@@ -51,11 +53,13 @@ public class Game extends AppCompatActivity {
     private int time;
     private MediaPlayer mp;
     private TreeMap<Integer, Character> notes;
+    private int currentNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
+
 
         et_what = (TextView) findViewById(R.id.songName);
 
@@ -93,6 +97,7 @@ public class Game extends AppCompatActivity {
         et_what.setText(Integer.toString(time));
         try {
             int resource = getResources().getIdentifier(name, "raw", getPackageName());
+
             playSong(0, time, resource, notes);
         } catch (Exception e) {
             et_what.setText("Error");
@@ -117,7 +122,7 @@ public class Game extends AppCompatActivity {
                 animation.setDuration(2000);
                 animation.start();
 
-                createNote("tap", 2);
+                createNote('t', 2);
 
             }
         });
@@ -139,13 +144,18 @@ public class Game extends AppCompatActivity {
         });
 
 
+    //createNote('t', 100);
+
 
     }
 
     private void playSong(int delay, int time, int song, TreeMap<Integer, Character> notes) {
         final int nestedsong = song;
         final int nestedtime = time;
-        final TreeMap<Integer, Character> nutes = notes;
+        TreeMap<Integer, Character> nutes = new TreeMap<Integer, Character>();
+        for(Map.Entry<Integer, Character> entry : notes.entrySet()) {
+            nutes.put(entry.getKey() + delay, entry.getValue());
+        }
         mp = MediaPlayer.create(this, nestedsong);
 
         new Timer().schedule(
@@ -153,7 +163,7 @@ public class Game extends AppCompatActivity {
                     @Override
                     public void run() {
                         mp.start();
-                        NoteTimer(nutes);
+
                         new Timer().schedule(
                                 new java.util.TimerTask() {
                                     @Override
@@ -163,18 +173,29 @@ public class Game extends AppCompatActivity {
                                 }, nestedtime);
                     }
                 }, delay);
+
+        NoteTimer(nutes);
     }
 
     private void NoteTimer (TreeMap<Integer, Character> notes) {
+
+        //Timer timer = new Timer();
+
+        final Runnable noteMove = new Runnable() {
+            public void run() {
+                createNote('t', 2);
+            }
+        };
         Timer timer = new Timer();
         for(Map.Entry<Integer, Character> entry : notes.entrySet()) {
             final Map.Entry<Integer, Character> entree = entry;
-            timer.schedule(new java.util.TimerTask() {
-                @Override
-                public void run() {
-                    Log.d("pen",entree.getValue()+"is");
-                }
-            }, entry.getKey());
+            timer.schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(noteMove);
+                        }
+                    }, entry.getKey());
         }
     }
 
@@ -195,7 +216,7 @@ public class Game extends AppCompatActivity {
         return true;
     }
 
-    public void createNote(String type, final int noteNumber){
+    public void createNote(char type, final int noteNumber){
         ImageView iv = new ImageView(getApplicationContext());
 
         ConstraintLayout parentLayout = (ConstraintLayout)findViewById(R.id.ConstraintLayout);
@@ -206,13 +227,13 @@ public class Game extends AppCompatActivity {
 
 
         switch(type){
-            case "left":
+            case 'l':
                 iv.setImageDrawable(getResources().getDrawable(R.drawable.noteleft));
                 break;
-            case "right":
+            case 'r':
                 iv.setImageDrawable(getResources().getDrawable(R.drawable.noteright));
                 break;
-            case "tap":
+            case 't':
                 iv.setImageDrawable(getResources().getDrawable(R.drawable.notetap));
                 break;
             default:
@@ -281,5 +302,6 @@ public class Game extends AppCompatActivity {
         ConstraintLayout parentLayout = (ConstraintLayout)findViewById(R.id.ConstraintLayout);
         parentLayout.removeView(note);
         //removeView(note);
+
     }
 }
