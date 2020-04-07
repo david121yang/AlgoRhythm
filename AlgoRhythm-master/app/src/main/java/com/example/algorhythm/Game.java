@@ -236,7 +236,8 @@ public class Game extends AppCompatActivity {
 
         // ... similarly add other constraints
         set.applyTo(parentLayout);
-
+        iv.bringToFront();
+        iv.invalidate();
         //RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
         //        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
