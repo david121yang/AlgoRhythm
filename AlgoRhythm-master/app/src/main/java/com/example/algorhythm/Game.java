@@ -8,7 +8,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Map;
 import java.util.Timer;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +50,7 @@ public class Game extends AppCompatActivity {
     private String name;
     private int time;
     private MediaPlayer mp;
+    private TreeMap<Integer, Character> notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,26 @@ public class Game extends AppCompatActivity {
         time = Integer.parseInt(times[1]) * 1000;
         time += Integer.parseInt(times[0]) * 60 * 1000;
 
+        notes = new TreeMap<Integer, Character>();
+        try {
+            final InputStream file = getAssets().open("test.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(file));
+            int noteCount = Integer.parseInt(reader.readLine());
+            int currentTime = 0;
+            for(int i = 0; i < noteCount; i++) {
+                String[] fields = reader.readLine().split(":");
+                fields = reader.readLine().split(" ");
+                float timestamp = Float.parseFloat(fields[0]);
+                char noteType = fields[1].charAt(0);
+                if(noteType == 'h') {
+                    //do more stuff
+                }
+                notes.put((int)(timestamp * 1000), noteType);
+            }
+        } catch(Exception e) {
+            //idfk
+
+        }
 
         name = launcher.getStringExtra("name");
         name = name.toLowerCase();
@@ -67,10 +94,11 @@ public class Game extends AppCompatActivity {
         et_what.setText(Integer.toString(time));
         try {
             int resource = getResources().getIdentifier(name, "raw", getPackageName());
-            playSong(0, time, resource);
+            playSong(0, time, resource, notes);
         } catch (Exception e) {
             et_what.setText("Error");
         }
+
 
 
 
@@ -115,9 +143,10 @@ public class Game extends AppCompatActivity {
 
     }
 
-    private void playSong(int delay, int time, int song) {
+    private void playSong(int delay, int time, int song, TreeMap<Integer, Character> notes) {
         final int nestedsong = song;
         final int nestedtime = time;
+        final TreeMap<Integer, Character> nutes = notes;
         mp = MediaPlayer.create(this, nestedsong);
 
         new Timer().schedule(
@@ -125,7 +154,7 @@ public class Game extends AppCompatActivity {
                     @Override
                     public void run() {
                         mp.start();
-
+                        NoteTimer(nutes);
                         new Timer().schedule(
                                 new java.util.TimerTask() {
                                     @Override
@@ -135,6 +164,19 @@ public class Game extends AppCompatActivity {
                                 }, nestedtime);
                     }
                 }, delay);
+    }
+
+    private void NoteTimer (TreeMap<Integer, Character> notes) {
+        Timer timer = new Timer();
+        for(Map.Entry<Integer, Character> entry : notes.entrySet()) {
+            final Map.Entry<Integer, Character> entree = entry;
+            timer.schedule(new java.util.TimerTask() {
+                @Override
+                public void run() {
+                    Log.d("pen",entree.getValue()+"is");
+                }
+            }, entry.getKey() * 1000);
+        }
     }
 
     @Override
