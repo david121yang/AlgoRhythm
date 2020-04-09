@@ -34,4 +34,10 @@ public class SongItem {
         this.rank = rank;
         this.textFileName = txtFile;
     }
+
+    public void updateScore(int highscore, int maxCombo, String rank){
+        this.highscore = highscore;
+        this.maxCombo = maxCombo;
+        this.rank = rank;
+    }
 }

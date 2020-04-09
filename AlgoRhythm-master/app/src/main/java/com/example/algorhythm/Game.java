@@ -62,17 +62,17 @@ public class Game extends AppCompatActivity {
     private ProgressBar rhythmMeter;
     static int newNote;
     static char newNoteType;
+    private int songListPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
 
-
         et_what = (TextView) findViewById(R.id.songName);
         nutes = new ArrayDeque<Integer>();
 
         launcher = getIntent();
-
+        songListPosition = launcher.getIntExtra("position", 0);
         //et_what.setText(launcher.getStringExtra("name"));
 
         String[] times = (launcher.getStringExtra("length")).split(":");
@@ -335,5 +335,13 @@ public class Game extends AppCompatActivity {
             //whatever
         }
 
+    }
+
+    public void songEnd(){
+        Intent intent = new Intent(getApplicationContext(), SongSelect.class);
+        SongItem s = SongSelect.jobItems.get(songListPosition);
+//        if(currentHighScore > s.getHighScore() || currentCombo > s.getMaxCombo() || currentRank.compareTo(s.getRank()) < 0)
+        SongSelect.jobItems.get(songListPosition).updateScore(1, 1, "F");
+        startActivity(intent);
     }
 }
