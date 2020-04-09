@@ -79,7 +79,7 @@ public class Game extends AppCompatActivity {
 
         notes = new TreeMap<Integer, Character>();
         try {
-            final InputStream file = getAssets().open("test.txt");
+            final InputStream file = getAssets().open(launcher.getStringExtra("textFile"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(file));
             int noteCount = Integer.parseInt(reader.readLine());
             int currentTime = 0;
@@ -93,7 +93,7 @@ public class Game extends AppCompatActivity {
                 notes.put((int)(timestamp * 1000), noteType);
             }
         } catch(Exception e) {
-            //idfk
+            //shouldn't get here
 
         }
 

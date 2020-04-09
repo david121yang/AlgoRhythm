@@ -52,8 +52,8 @@ public class SongSelect extends AppCompatActivity  {
         // create ArrayList of courses from database
         if(jobItems == null) {
             jobItems = new ArrayList<SongItem>();
-            jobItems.add(new SongItem("Sea Shanty 2", 2, "1:01"));
-            jobItems.add(new SongItem("through the fire and the flames 2", 4, "1:01"));
+            jobItems.add(new SongItem("Sea Shanty 2", 2, "1:01", "sea_shanty_2"));
+            jobItems.add(new SongItem("through the fire and the flames 2", 4, "1:01","test.txt"));
         }
         // make array adapter to bind arraylist to listview with new custom item layout
         aa = new SongItemAdapter(this, R.layout.song_item_layout, jobItems);
