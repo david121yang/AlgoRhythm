@@ -40,6 +40,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -58,6 +59,7 @@ public class Game extends AppCompatActivity {
     private TreeMap<Integer, Character> notes;
     private int currentNote;
     private ArrayDeque<Integer> nutes;
+    private ProgressBar rhythmMeter;
     static int newNote;
     static char newNoteType;
     @Override
@@ -165,7 +167,9 @@ public class Game extends AppCompatActivity {
                 }
             }
         });
-
+        rhythmMeter = (ProgressBar) findViewById(R.id.rhythmmeter);
+        rhythmMeter.setMax(100);
+        rhythmMeter.setProgress(50);
 
     }
 
