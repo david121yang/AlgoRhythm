@@ -70,6 +70,8 @@ public class SongItemAdapter extends BaseExpandableListAdapter {
                 Intent intent = new Intent(context.getApplicationContext(), Game.class);
                 intent.putExtra("name", realjb.getTitle());
                 intent.putExtra("length", realjb.getLength());
+                intent.putExtra("textFile", realjb.getTextFileName());
+                intent.putExtra("position", realPosition);
                 context.startActivity(intent);
             }
         });

@@ -40,6 +40,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -58,19 +59,20 @@ public class Game extends AppCompatActivity {
     private TreeMap<Integer, Character> notes;
     private int currentNote;
     private ArrayDeque<Integer> nutes;
+    private ProgressBar rhythmMeter;
     static int newNote;
     static char newNoteType;
+    private int songListPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
 
-
         et_what = (TextView) findViewById(R.id.songName);
         nutes = new ArrayDeque<Integer>();
 
         launcher = getIntent();
-
+        songListPosition = launcher.getIntExtra("position", 0);
         //et_what.setText(launcher.getStringExtra("name"));
 
         String[] times = (launcher.getStringExtra("length")).split(":");
@@ -79,7 +81,7 @@ public class Game extends AppCompatActivity {
 
         notes = new TreeMap<Integer, Character>();
         try {
-            final InputStream file = getAssets().open("test.txt");
+            final InputStream file = getAssets().open(launcher.getStringExtra("textFile"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(file));
             int noteCount = Integer.parseInt(reader.readLine());
             int currentTime = 0;
@@ -93,7 +95,7 @@ public class Game extends AppCompatActivity {
                 notes.put((int)(timestamp * 1000), noteType);
             }
         } catch(Exception e) {
-            //idfk
+            //shouldn't get here
 
         }
 
@@ -147,7 +149,9 @@ public class Game extends AppCompatActivity {
                 }
             }
         });
-
+        rhythmMeter = (ProgressBar) findViewById(R.id.rhythmmeter);
+        rhythmMeter.setMax(100);
+        rhythmMeter.setProgress(50);
 
 
 
@@ -345,5 +349,13 @@ public class Game extends AppCompatActivity {
             //whatever
         }
 
+    }
+
+    public void songEnd(){
+        Intent intent = new Intent(getApplicationContext(), SongSelect.class);
+        SongItem s = SongSelect.jobItems.get(songListPosition);
+//        if(currentHighScore > s.getHighScore() || currentCombo > s.getMaxCombo() || currentRank.compareTo(s.getRank()) < 0)
+        SongSelect.jobItems.get(songListPosition).updateScore(1, 1, "F");
+        startActivity(intent);
     }
 }

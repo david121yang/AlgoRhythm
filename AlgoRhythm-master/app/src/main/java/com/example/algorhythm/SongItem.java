@@ -11,9 +11,10 @@ public class SongItem {
     private int highscore;
     private int maxCombo;
     private String rank;
+    private String textFileName;
 
-    SongItem(String title, int difficulty, String length) {
-        this.setAll(title, difficulty, length, 0, 0, "Z");
+    SongItem(String title, int difficulty, String length, String textFile) {
+        this.setAll(title, difficulty, length, 0, 0, "Z", textFile);
     }
 
     public String getTitle() { return title; }
@@ -22,11 +23,19 @@ public class SongItem {
     public int getHighScore() { return highscore; }
     public int getMaxCombo() { return maxCombo; }
     public String getRank() { return rank; }
+    public String getTextFileName() { return textFileName; }
 
-    public void setAll(String title, int difficulty, String length, int highscore, int maxCombo, String rank) {
+    public void setAll(String title, int difficulty, String length, int highscore, int maxCombo, String rank, String txtFile) {
         this.title = title;
         this.difficulty = difficulty;
         this.length = length;
+        this.highscore = highscore;
+        this.maxCombo = maxCombo;
+        this.rank = rank;
+        this.textFileName = txtFile;
+    }
+
+    public void updateScore(int highscore, int maxCombo, String rank){
         this.highscore = highscore;
         this.maxCombo = maxCombo;
         this.rank = rank;
