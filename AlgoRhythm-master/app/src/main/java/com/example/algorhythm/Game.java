@@ -144,6 +144,7 @@ public class Game extends AppCompatActivity {
         goZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("onClick");
                 if(!nutes.isEmpty()) {
                     removeNote(nutes.peek());
                 }
@@ -162,21 +163,23 @@ public class Game extends AppCompatActivity {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                /*if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    System.out.println("ACTION_MOVE");
-                }*/
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         x1 = event.getX();
-                        //System.out.println("x1 = " + x1);
+                        System.out.println("x1 = " + x1);
                         return true;
                     case MotionEvent.ACTION_UP:
                         x2 = event.getX();
-                        //System.out.println("x2 = " + x2);
+                        System.out.println("x2 = " + x2);
                         break;
                 }
                 if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
                     System.out.println("swiped");
+                } else {
+                    //old onClick code
+                    if(!nutes.isEmpty()) {
+                        removeNote(nutes.peek());
+                    }
                 }
                 return true;
             }
