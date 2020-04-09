@@ -135,25 +135,7 @@ public class Game extends AppCompatActivity {
             }
         });
 
-
-
-        button.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                //return true if the action was handled successfully
-                /*((Button) v).setText("Dragged2.");
-
-                if (event.getAction() == DragEvent.ACTION_DRAG_STARTED ||
-                event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                    ((Button) v).setText("Dragged.");
-                }
-
-                System.out.println("test");
-                return true;
-            }
-        });*/
-
-
+*/
     //createNote('t', 100);
 
         ImageView goZone = findViewById(R.id.goZone);
@@ -167,7 +149,39 @@ public class Game extends AppCompatActivity {
         });
 
 
+
+
+        goZone.setOnTouchListener(new View.OnTouchListener() {
+            final float SWIPE_THRESHHOLD = 250;
+            private float x1;
+            private float x2;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                /*if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    System.out.println("ACTION_MOVE");
+                }*/
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        x1 = event.getX();
+                        //System.out.println("x1 = " + x1);
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        x2 = event.getX();
+                        //System.out.println("x2 = " + x2);
+                        break;
+                }
+                if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
+                    System.out.println("swiped");
+                }
+                return true;
+            }
+        });
+
+
     }
+
+
 
 
     private void playSong(int delay, int time, int song, TreeMap<Integer, Character> notes) {
