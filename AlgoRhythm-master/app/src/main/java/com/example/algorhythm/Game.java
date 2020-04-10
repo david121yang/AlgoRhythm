@@ -179,9 +179,15 @@ public class Game extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         x2 = event.getX();
                         System.out.println("x2 = " + x2);
-                        break;
+                        if (x1 - x2 > SWIPE_THRESHHOLD) {
+                            System.out.println("LEFT");
+                        } else if (x2 - x1 > SWIPE_THRESHHOLD) {
+                            System.out.println("RIGHT");
+                        } else {
+                            System.out.println("TAP");
+                        }
                 }
-                try{
+                /*try{
                     Character newt = newts.peek();
                     if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
                         if (x1 > x2) {
@@ -240,6 +246,8 @@ public class Game extends AppCompatActivity {
                 } catch(Exception e) {
                     return true;
                 }
+             */
+            return true;
             }
         });
 
