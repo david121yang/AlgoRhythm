@@ -403,9 +403,13 @@ public class Game extends AppCompatActivity {
             note.setVisibility(View.GONE);
             ConstraintLayout parentLayout = (ConstraintLayout) findViewById(R.id.ConstraintLayout);
             parentLayout.removeView(note);
-
+            int newProgress = rhythmMeter.getProgress();
             if(oldbo != newbo && newbo > 0) {
-                rhythmMeter.setProgress(rhythmMeter.getProgress() + 5);
+                newProgress += 5;
+                if (newProgress > 100){
+                    newProgress = 100;
+                }
+                rhythmMeter.setProgress(newProgress);
                 oldbo = newbo;
                 if(oldbo > maxbo) {
                     maxbo = oldbo;
@@ -415,7 +419,11 @@ public class Game extends AppCompatActivity {
                 if(newbo > 0) {
                     score++;
                 }
-                rhythmMeter.setProgress(rhythmMeter.getProgress() - 10);
+                newProgress -= 10;
+                if (newProgress < 0){
+                    newProgress = 0;
+                }
+                rhythmMeter.setProgress(newProgress);
                 // check lose right here
                 oldbo = 0;
                 newbo = 0;
