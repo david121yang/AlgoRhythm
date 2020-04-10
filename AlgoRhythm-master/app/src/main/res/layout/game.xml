@@ -8,6 +8,7 @@
     android:background="@drawable/app_background">
 
 
+
     <ImageView
         android:id="@+id/tracklines"
         android:layout_width="wrap_content"
@@ -56,8 +57,21 @@
         android:layout_width="361dp"
         android:layout_height="22dp"
         android:layout_marginBottom="20dp"
+        android:progressDrawable="@drawable/progressbar_rounded_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/songProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="361dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="18dp"
+        android:progress="10"
+        android:progressDrawable="@drawable/progressbar_rounded_corner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/songName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

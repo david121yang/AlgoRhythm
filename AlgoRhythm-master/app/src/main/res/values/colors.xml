@@ -3,6 +3,7 @@
     <color name="brightBlue">#1A86EA</color>
     <color name="paleBlue">#87C5F8</color>
     <color name="lightBlue">#53D0F6</color>
+    <color name="transparentLightBlue">#3F53D0F6</color>
     <color name="blackground">#0D1824</color>
     <color name="transparentBlue">#CC53D0F6</color>
 </resources>

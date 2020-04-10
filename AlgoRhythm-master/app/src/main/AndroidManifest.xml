@@ -31,6 +31,7 @@
         <activity
             android:name=".Game"
             android:label="Game"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".SongSelect"></activity>
 
         <meta-data

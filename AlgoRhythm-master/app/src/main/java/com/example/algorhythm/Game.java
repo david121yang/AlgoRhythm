@@ -10,9 +10,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.Map;
 import java.util.Timer;
-import java.util.TreeMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -39,6 +37,7 @@ public class Game extends AppCompatActivity {
     private ArrayDeque<Note> notesOffScreen;
     private ArrayDeque<Note> notesOnScreen;
     private ProgressBar rhythmMeter;
+    private ProgressBar songProgress;
     static int newNote;
     private int songListPosition;
     private int oldbo = 0;
@@ -195,6 +194,9 @@ public class Game extends AppCompatActivity {
         rhythmMeter.setMax(100);
         rhythmMeter.setProgress(50);
 
+        songProgress = (ProgressBar) findViewById(R.id.songProgress);
+        //songProgress.setMax();
+        //songProgress.setProgress(0);
 
 
         goZone.setOnTouchListener(new View.OnTouchListener() {
