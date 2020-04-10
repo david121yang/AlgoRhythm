@@ -181,7 +181,7 @@ public class Game extends AppCompatActivity {
                 if(noteType == 'h') {
                     //do more stuff
                 }
-                notesOffScreen.add(new Note(noteType, (int) (timestamp * 1000)));
+                notesOffScreen.add(new Note(noteType, (int) (timestamp * 1000 - 1500)));
             }
         } catch(Exception e) {
             //shouldn't get here
