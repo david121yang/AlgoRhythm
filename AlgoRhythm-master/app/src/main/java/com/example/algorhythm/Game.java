@@ -267,7 +267,7 @@ public class Game extends AppCompatActivity {
 
                                     System.out.println(y);
                                     System.out.println(target);
-                                    if (newt == 'l' &&  y + 100 > target) {
+                                    if (newt == 'l' &&  y + 100 > target && y < target + 300) {
                                         newbo++;
                                     } else {
                                         newbo = 0;
@@ -283,7 +283,7 @@ public class Game extends AppCompatActivity {
                                         target = goZone.getTop();
                                     }
                                     float y = nextNote.getY();
-                                    if (newt == 'r' && y + 100 > target) {
+                                    if (newt == 'r' &&  y + 100 > target && y < target + 300) {
                                         newbo++;
                                     } else {
                                         newbo = 0;
@@ -300,7 +300,7 @@ public class Game extends AppCompatActivity {
                                     target = goZone.getTop();
                                 }
                                 float y = nextNote.getY();
-                                if (newt == 't' && y + 100 > target) {
+                                if (newt == 't' &&  y + 100 > target && y < target + 300) {
                                     newbo++;
                                 } else {
                                     newbo = 0;
