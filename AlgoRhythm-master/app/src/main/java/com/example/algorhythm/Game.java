@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -197,8 +198,19 @@ public class Game extends AppCompatActivity {
         rhythmMeter.setProgress(50);
 
         songProgress = (ProgressBar) findViewById(R.id.songProgress);
-        //songProgress.setMax();
-        //songProgress.setProgress(0);
+        songProgress.setMax(time / 1000);
+        songProgress.setProgress(0);
+        //songProgress.setRotationX(180);
+        CountDownTimer songProgresstimer = new CountDownTimer(time, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                songProgress.setProgress(songProgress.getProgress() + 1);
+            }
+
+            public void onFinish() {
+
+            }
+        }.start();
 
 
         goZone.setOnTouchListener(new View.OnTouchListener() {
@@ -383,6 +395,7 @@ public class Game extends AppCompatActivity {
             parentLayout.removeView(note);
 
             if(oldbo != newbo && newbo > 0) {
+                rhythmMeter.setProgress(rhythmMeter.getProgress() + 5);
                 oldbo = newbo;
                 if(oldbo > maxbo) {
                     maxbo = oldbo;
@@ -392,6 +405,8 @@ public class Game extends AppCompatActivity {
                 if(newbo > 0) {
                     score++;
                 }
+                rhythmMeter.setProgress(rhythmMeter.getProgress() - 10);
+                // check lose right here
                 oldbo = 0;
                 newbo = 0;
             }
