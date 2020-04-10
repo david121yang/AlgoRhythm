@@ -2,6 +2,7 @@ package com.example.algorhythm;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -16,10 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -104,7 +107,13 @@ public class Game extends AppCompatActivity {
             image.bringToFront();
             image.invalidate();
 
-            animation = ObjectAnimator.ofFloat(image, "translationY", image.getTranslationY() + 1400);
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE); // the results will be higher than using the activity context object or the getWindowManager() shortcut
+            wm.getDefaultDisplay().getMetrics(displayMetrics);
+            int screenHeight = displayMetrics.heightPixels;
+
+            animation = ObjectAnimator.ofFloat(image, "translationY", image.getTranslationY() + screenHeight);
             animation.setDuration(2000);
             animation.setInterpolator(new LinearInterpolator());
             animation.addListener(new Animator.AnimatorListener() {
