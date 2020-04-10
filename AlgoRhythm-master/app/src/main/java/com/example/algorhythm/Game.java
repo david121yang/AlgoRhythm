@@ -179,13 +179,13 @@ public class Game extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         x2 = event.getX();
                         System.out.println("x2 = " + x2);
-                        break;
-                }
-                try{
-                    Character newt = newts.peek();
-                    if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
-                        if (x1 > x2) {
-                            System.out.println("LEFT");
+
+                        try{
+                            Character newt = newts.peek();
+                            if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
+                                if (x1 > x2) {
+                                    System.out.println("LEFT");
+
                             if (target == -1) {
                                 ImageView goZone = (ImageView) findViewById(R.id.goZone);
                                 target = goZone.getTop();
@@ -202,8 +202,11 @@ public class Game extends AppCompatActivity {
                             }
 
                             removeNote(nutes.peek());
-                        } else {
-                            System.out.println("RIGHT");
+
+
+                                } else {
+                                    System.out.println("RIGHT");
+
                             if (target == -1) {
                                 ImageView goZone = (ImageView) findViewById(R.id.goZone);
                                 target = goZone.getTop();
@@ -218,9 +221,12 @@ public class Game extends AppCompatActivity {
 
                             removeNote(nutes.peek());
 
-                        }
-                    } else {
-                        System.out.println("TAP");
+
+
+                                }
+                            } else {
+                                System.out.println("TAP");
+
                         if (target == -1) {
                             ImageView goZone = (ImageView) findViewById(R.id.goZone);
                             target = goZone.getTop();
@@ -235,11 +241,15 @@ public class Game extends AppCompatActivity {
 
                         removeNote(nutes.peek());
 
-                    }
-                    return true;
-                } catch(Exception e) {
-                    return true;
+                         
+
+                            }
+                        } catch(Exception e) {
+                            //
+                        }
+                        break;
                 }
+                return true;
             }
         });
 
