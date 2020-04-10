@@ -38,7 +38,7 @@ public class Game extends AppCompatActivity {
     private ArrayDeque<Note> notesOnScreen;
     private ProgressBar rhythmMeter;
     private ProgressBar songProgress;
-    static int newNote;
+    static int newNote = 0;
     private int songListPosition;
     private int oldbo = 0;
     private int newbo = 0;
@@ -53,12 +53,8 @@ public class Game extends AppCompatActivity {
         public final ImageView image;
         public final int timestamp;
 
-        Note(char type, int time) {
-            this(++newNote, type, time);
-        }
-
-        public Note(int ID, char type, int time) {
-            this.ID = ID;
+        public Note(char type, int time) {
+            this.ID = ++newNote;
             this.type = type;
             image = new ImageView(getApplicationContext());
             image.setId(ID);
@@ -104,7 +100,7 @@ public class Game extends AppCompatActivity {
             image.bringToFront();
             image.invalidate();
 
-            animation = ObjectAnimator.ofFloat(image, "translationY", image.getTranslationY() + 1400);
+            animation = ObjectAnimator.ofFloat(image, "translationY", image.getTranslationY() + 1600);
             animation.setDuration(2000);
             animation.setInterpolator(new LinearInterpolator());
             animation.addListener(new Animator.AnimatorListener() {
@@ -119,6 +115,8 @@ public class Game extends AppCompatActivity {
                     //so that it doesn't just remove the next note
 
                     if (!notesOnScreen.isEmpty() && notesOnScreen.peek().ID == ID) {
+
+                        System.out.println("Automatically deleting");
                         removeNextNote();
                     }
 
@@ -162,7 +160,6 @@ public class Game extends AppCompatActivity {
             final InputStream file = getAssets().open(launcher.getStringExtra("textFile"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(file));
             int noteCount = Integer.parseInt(reader.readLine());
-            int currentTime = 0;
             for(int i = 0; i < noteCount; i++) {
                 String[] fields = reader.readLine().split(" ");
                 float timestamp = Float.parseFloat(fields[0]);
@@ -230,10 +227,10 @@ public class Game extends AppCompatActivity {
                             if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
                                 if (x1 > x2) {
                                     System.out.println("LEFT");
-                                    if (target == -1) {
-                                        ImageView goZone = (ImageView) findViewById(R.id.goZone);
-                                        target = goZone.getTop();
-                                    }
+                                    /*if (target == -1) {
+                                        //ImageView goZone = (ImageView) findViewById(R.id.goZone);
+                                        //target = goZone.getTop();
+                                    }*/
                                     float y = nextNote.getY();
 
                                     System.out.println(y);
@@ -244,6 +241,7 @@ public class Game extends AppCompatActivity {
                                         newbo = 0;
                                     }
 
+                                    removeNextNote();
 
 
                                 } else {
@@ -260,6 +258,7 @@ public class Game extends AppCompatActivity {
                                         newbo = 0;
                                     }
 
+                                    removeNextNote();
 
 
                                 }
@@ -277,14 +276,13 @@ public class Game extends AppCompatActivity {
                                     newbo = 0;
                                 }
 
-
+                                removeNextNote();
 
                             }
                         } catch(Exception e) {
                             //
                         }
 
-                        removeNextNote();
 
                         break;
                 }
@@ -335,9 +333,11 @@ public class Game extends AppCompatActivity {
 
         final Runnable noteMove = new Runnable() {
             public void run() {
-                Note nextNote = notesOffScreen.poll();
-                nextNote.draw();
-                notesOnScreen.addLast(nextNote);
+                if (!notesOffScreen.isEmpty()) {
+                    Note nextNote = notesOffScreen.poll();
+                    nextNote.draw();
+                    notesOnScreen.addLast(nextNote);
+                }
             }
         };
         Timer timer = new Timer();
@@ -375,7 +375,12 @@ public class Game extends AppCompatActivity {
     public void removeNextNote(){
 
         try {
-            Note nextNote = notesOnScreen.poll();
+            Note nextNote;
+            if (!notesOnScreen.isEmpty()) {
+                nextNote = notesOnScreen.poll();
+            } else {
+                return;
+            }
             ImageView note = nextNote.image;
             //nextNote.animation.cancel();
             note.setVisibility(View.GONE);
