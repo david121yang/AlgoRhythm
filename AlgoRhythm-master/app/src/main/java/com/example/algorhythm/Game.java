@@ -223,6 +223,11 @@ public class Game extends AppCompatActivity {
         }.start();
 
 
+        //ImageView goZone = (ImageView) findViewById(R.id.goZone);
+        //target = goZone.getTranslationY();
+        //target = 400;
+
+
         goZone.setOnTouchListener(new View.OnTouchListener() {
             final float SWIPE_THRESHHOLD = 250;
             private float x1;
@@ -252,10 +257,7 @@ public class Game extends AppCompatActivity {
                             if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
                                 if (x1 > x2) {
                                     System.out.println("LEFT");
-                                    if (target == -1) {
-                                        ImageView goZone = (ImageView) findViewById(R.id.goZone);
-                                        target = goZone.getTop();
-                                    }
+
                                     float y = nextNote.getY();
 
                                     System.out.println(y);
@@ -357,9 +359,11 @@ public class Game extends AppCompatActivity {
 
         final Runnable noteMove = new Runnable() {
             public void run() {
-                Note nextNote = notesOffScreen.poll();
-                nextNote.draw();
-                notesOnScreen.addLast(nextNote);
+                if (!notesOffScreen.isEmpty()) {
+                    Note nextNote = notesOffScreen.poll();
+                    nextNote.draw();
+                    notesOnScreen.addLast(nextNote);
+                }
             }
         };
         Timer timer = new Timer();
@@ -397,7 +401,12 @@ public class Game extends AppCompatActivity {
     public void removeNextNote(){
 
         try {
-            Note nextNote = notesOnScreen.poll();
+            Note nextNote;
+            if (!notesOnScreen.isEmpty()) {
+                nextNote = notesOnScreen.poll();
+            } else {
+                return;
+            }
             ImageView note = nextNote.image;
             //nextNote.animation.cancel();
             note.setVisibility(View.GONE);
