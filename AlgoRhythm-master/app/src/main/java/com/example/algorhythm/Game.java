@@ -179,13 +179,19 @@ public class Game extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         x2 = event.getX();
                         System.out.println("x2 = " + x2);
-
-                        try{
-                            Character newt = newts.peek();
-                            if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
-                                if (x1 > x2) {
-                                    System.out.println("LEFT");
-
+                        if (x1 - x2 > SWIPE_THRESHHOLD) {
+                            System.out.println("LEFT");
+                        } else if (x2 - x1 > SWIPE_THRESHHOLD) {
+                            System.out.println("RIGHT");
+                        } else {
+                            System.out.println("TAP");
+                        }
+                }
+                /*try{
+                    Character newt = newts.peek();
+                    if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
+                        if (x1 > x2) {
+                            System.out.println("LEFT");
                             if (target == -1) {
                                 ImageView goZone = (ImageView) findViewById(R.id.goZone);
                                 target = goZone.getTop();
@@ -241,7 +247,7 @@ public class Game extends AppCompatActivity {
 
                         removeNote(nutes.peek());
 
-                         
+
 
                             }
                         } catch(Exception e) {
@@ -249,7 +255,8 @@ public class Game extends AppCompatActivity {
                         }
                         break;
                 }
-                return true;
+             */
+            return true;
             }
         });
 
