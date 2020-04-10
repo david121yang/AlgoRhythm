@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -59,10 +60,16 @@ public class Game extends AppCompatActivity {
     private TreeMap<Integer, Character> notes;
     private int currentNote;
     private ArrayDeque<Integer> nutes;
+    private ArrayDeque<Character> newts;
     private ProgressBar rhythmMeter;
     static int newNote;
     static char newNoteType;
     private int songListPosition;
+    private int oldbo = 0;
+    private int newbo = 0;
+    private int maxbo = 0;
+    private int score = 0;
+    private float target = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +77,7 @@ public class Game extends AppCompatActivity {
 
         et_what = (TextView) findViewById(R.id.songName);
         nutes = new ArrayDeque<Integer>();
+        newts = new ArrayDeque<Character>();
 
         launcher = getIntent();
         songListPosition = launcher.getIntExtra("position", 0);
@@ -173,15 +181,65 @@ public class Game extends AppCompatActivity {
                         System.out.println("x2 = " + x2);
                         break;
                 }
-                if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
-                    System.out.println("swiped");
-                } else {
-                    //old onClick code
-                    if(!nutes.isEmpty()) {
+                try{
+                    Character newt = newts.peek();
+                    if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
+                        if (x1 > x2) {
+                            System.out.println("LEFT");
+                            if (target == -1) {
+                                ImageView goZone = (ImageView) findViewById(R.id.goZone);
+                                target = goZone.getTop();
+                            }
+                            ImageView img = (ImageView) findViewById(nutes.peek());
+                            System.out.println(newt);
+                            float y = img.getTranslationY();
+                            System.out.println(y);
+                            System.out.println(target);
+                            if (newt == 'l' &&  y + 100 > target) {
+                                newbo++;
+                            } else {
+                                newbo = 0;
+                            }
+
+                            removeNote(nutes.peek());
+                        } else {
+                            System.out.println("RIGHT");
+                            if (target == -1) {
+                                ImageView goZone = (ImageView) findViewById(R.id.goZone);
+                                target = goZone.getTop();
+                            }
+                            ImageView img = (ImageView) findViewById(nutes.peek());
+                            float y = img.getTranslationY();
+                            if (newt == 'r' && y + 100 > target) {
+                                newbo++;
+                            } else {
+                                newbo = 0;
+                            }
+
+                            removeNote(nutes.peek());
+
+                        }
+                    } else {
+                        System.out.println("TAP");
+                        if (target == -1) {
+                            ImageView goZone = (ImageView) findViewById(R.id.goZone);
+                            target = goZone.getTop();
+                        }
+                        ImageView img = (ImageView) findViewById(nutes.peek());
+                        float y = img.getTranslationY();
+                        if (newt == 't' && y + 100 > target) {
+                            newbo++;
+                        } else {
+                            newbo = 0;
+                        }
+
                         removeNote(nutes.peek());
+
                     }
+                    return true;
+                } catch(Exception e) {
+                    return true;
                 }
-                return true;
             }
         });
 
@@ -211,6 +269,7 @@ public class Game extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         mp.stop();
+                                        songEnd();
                                     }
                                 }, nestedtime);
                     }
@@ -273,15 +332,19 @@ public class Game extends AppCompatActivity {
         switch(type){
             case 'l':
                 iv.setImageDrawable(getResources().getDrawable(R.drawable.noteleft));
+                newts.add('l');
                 break;
             case 'r':
                 iv.setImageDrawable(getResources().getDrawable(R.drawable.noteright));
+                newts.add('r');
                 break;
             case 't':
                 iv.setImageDrawable(getResources().getDrawable(R.drawable.notetap));
+                newts.add('t');
                 break;
             default:
                 iv.setImageDrawable(getResources().getDrawable(R.drawable.notetap));
+                newts.add('t');
                 break;
         }
 
@@ -322,6 +385,7 @@ public class Game extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animator) {
                 nutes.poll();
+                newts.poll();
                 removeNote(noteNumber);
             }
 
@@ -347,7 +411,21 @@ public class Game extends AppCompatActivity {
             note.setVisibility(View.GONE);
             ConstraintLayout parentLayout = (ConstraintLayout) findViewById(R.id.ConstraintLayout);
             parentLayout.removeView(note);
-            //removeView(note);
+
+            if(oldbo != newbo && newbo > 0) {
+                oldbo = newbo;
+                if(oldbo > maxbo) {
+                    maxbo = oldbo;
+                }
+                score += newbo;
+            } else {
+                if(newbo > 0) {
+                    score++;
+                }
+                oldbo = 0;
+                newbo = 0;
+            }
+            et_what.setText(Integer.toString(newbo) + " - " + Integer.toString(maxbo) + " - " + Integer.toString(score));
         } catch (Exception e) {
             //whatever
         }
@@ -358,7 +436,7 @@ public class Game extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), SongSelect.class);
         SongItem s = SongSelect.jobItems.get(songListPosition);
 //        if(currentHighScore > s.getHighScore() || currentCombo > s.getMaxCombo() || currentRank.compareTo(s.getRank()) < 0)
-        SongSelect.jobItems.get(songListPosition).updateScore(1, 1, "F");
+        SongSelect.jobItems.get(songListPosition).updateScore(Math.max(s.getHighScore(), score), Math.max(maxbo, s.getMaxCombo()), "?");
         startActivity(intent);
     }
 }
