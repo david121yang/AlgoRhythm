@@ -1,0 +1,43 @@
+Meeting Notes
+4/1/20
+  -Divided up tasks for demo
+  -Assigned research on topics necessary for parts of gameplay
+    -Bruce - Animation
+    -Peter - Song Playing
+    -Dave - Note creation from text
+    -Ryan - Tap/swipe functionality
+4/5/20
+  -Gameplay Screen Creation
+  -Decided to use object animator
+  -Create translation animation for each note type
+  -Instantiate using a function programmatically
+  -Delete on finish or earlier
+  -having trouble accessing note file
+  -Need to create a hardcoded demo file
+  -swipes/drags are not working atm
+
+4/6/20
+  -Fixed note creation system and created basic level
+  -Fixed animation calls and issues creating out of turn
+  -Fixed 
+4/8/20
+  -Things to go for first sprint
+    -Score/combo
+    -Level end
+    -Dragging
+    -Hit detection
+    -Songs save scores
+    -Meters
+    -General navigation and style
+    -Hardcode more sea shanty 2
+4/9/20
+  -Assigned tasks, goal to finish individual sections by 4pm Friday
+  -Things to go for first sprint
+    -Peter - Score/combo, and Level ending
+    -Ryan - Swiping, and Hit detection
+    -Dave - Songs, save scores, Hardcode more sea shanty 2
+    -Bruce - Meters, improving xml and ui
+4/10/20
+    -Met to finish any remaining bugs and merge all work
+    -Updated codebase to be more object oriented
+    -Updated readme and meeting notes. 
