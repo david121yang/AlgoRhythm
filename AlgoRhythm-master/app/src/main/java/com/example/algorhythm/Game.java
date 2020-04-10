@@ -50,6 +50,8 @@ public class Game extends AppCompatActivity {
     private int maxbo = 0;
     private int score = 0;
     private float target = -1;
+    private TextView comboBoard;
+    private TextView scoreBoard;
 
     class Note {
         public ObjectAnimator animation;
@@ -156,6 +158,9 @@ public class Game extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
+
+        scoreBoard = (TextView) findViewById(R.id.score);
+        comboBoard = (TextView) findViewById(R.id.combo);
 
         et_what = (TextView) findViewById(R.id.songName);
         notesOffScreen = new ArrayDeque<>();
@@ -437,7 +442,9 @@ public class Game extends AppCompatActivity {
                 oldbo = 0;
                 newbo = 0;
             }
-            et_what.setText(Integer.toString(newbo) + " - " + Integer.toString(maxbo) + " - " + Integer.toString(score));
+            scoreBoard.setText(Integer.toString(score));
+            comboBoard.setText(Integer.toString(newbo));
+           // et_what.setText(Integer.toString(newbo) + " - " + Integer.toString(maxbo) + " - " + Integer.toString(score));
         } catch (Exception e) {
             //whatever
         }
