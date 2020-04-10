@@ -117,9 +117,11 @@ public class Game extends AppCompatActivity {
                 public void onAnimationEnd(Animator animator) {
                     //make sure it's actually fallen all the way down the screen
                     //so that it doesn't just remove the next note
-                    if (getY() == target) {
+
+                    if (!notesOnScreen.isEmpty() && notesOnScreen.peek().ID == ID) {
                         removeNextNote();
                     }
+
                 }
 
                 @Override
@@ -375,7 +377,7 @@ public class Game extends AppCompatActivity {
         try {
             Note nextNote = notesOnScreen.poll();
             ImageView note = nextNote.image;
-            nextNote.animation.cancel();
+            //nextNote.animation.cancel();
             note.setVisibility(View.GONE);
             ConstraintLayout parentLayout = (ConstraintLayout) findViewById(R.id.ConstraintLayout);
             parentLayout.removeView(note);
