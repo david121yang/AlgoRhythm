@@ -2,11 +2,7 @@ package com.example.algorhythm;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -14,39 +10,22 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Timer;
 import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.example.algorhythm.R;
 
 
 public class Game extends AppCompatActivity {
@@ -57,27 +36,118 @@ public class Game extends AppCompatActivity {
     private String name;
     private int time;
     private MediaPlayer mp;
-    private TreeMap<Integer, Character> notes;
-    private int currentNote;
-    private ArrayDeque<Integer> nutes;
-    private ArrayDeque<Character> newts;
+    private ArrayDeque<Note> notesOffScreen;
+    private ArrayDeque<Note> notesOnScreen;
     private ProgressBar rhythmMeter;
     static int newNote;
-    static char newNoteType;
     private int songListPosition;
     private int oldbo = 0;
     private int newbo = 0;
     private int maxbo = 0;
     private int score = 0;
     private float target = -1;
+
+    class Note {
+        public ObjectAnimator animation;
+        public final int ID;
+        public final char type;
+        public final ImageView image;
+        public final int timestamp;
+
+        Note(char type, int time) {
+            this(++newNote, type, time);
+        }
+
+        public Note(int ID, char type, int time) {
+            this.ID = ID;
+            this.type = type;
+            image = new ImageView(getApplicationContext());
+            image.setId(ID);
+            switch(type){
+
+                case 'l':
+                    image.setImageDrawable(getResources().getDrawable(R.drawable.noteleft));
+                    break;
+                case 'r':
+                    image.setImageDrawable(getResources().getDrawable(R.drawable.noteright));
+                    break;
+                case 't':
+                    image.setImageDrawable(getResources().getDrawable(R.drawable.notetap));
+                    break;
+                default:
+                    image.setImageDrawable(getResources().getDrawable(R.drawable.notetap));
+                    break;
+            }
+            timestamp = time;
+        }
+
+        public float getY() {
+            return image.getTranslationY();
+        }
+
+        public void draw() {
+            ConstraintLayout parentLayout = (ConstraintLayout)findViewById(R.id.ConstraintLayout);
+
+            // set view id, else getId() returns -1
+
+            ConstraintSet set = new ConstraintSet();
+
+            parentLayout.addView(image, 0);
+            set.clone(parentLayout);
+            // connect start and end point of views, in this case top of child to top of parent.
+            set.connect(image.getId(), ConstraintSet.TOP, parentLayout.getId(), ConstraintSet.TOP, 60);
+            set.connect(image.getId(), ConstraintSet.LEFT, parentLayout.getId(), ConstraintSet.LEFT, 60);
+            set.connect(image.getId(), ConstraintSet.RIGHT, parentLayout.getId(), ConstraintSet.RIGHT, 60);
+
+
+            // ... similarly add other constraints
+            set.applyTo(parentLayout);
+            image.bringToFront();
+            image.invalidate();
+
+            animation = ObjectAnimator.ofFloat(image, "translationY", image.getTranslationY() + 1400);
+            animation.setDuration(2000);
+            animation.setInterpolator(new LinearInterpolator());
+            animation.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    //make sure it's actually fallen all the way down the screen
+                    //so that it doesn't just remove the next note
+                    if (getY() == target) {
+                        removeNextNote();
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+
+
+            });
+            animation.start();
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
 
         et_what = (TextView) findViewById(R.id.songName);
-        nutes = new ArrayDeque<Integer>();
-        newts = new ArrayDeque<Character>();
+        notesOffScreen = new ArrayDeque<>();
+        notesOnScreen = new ArrayDeque<>();
 
         launcher = getIntent();
         songListPosition = launcher.getIntExtra("position", 0);
@@ -87,7 +157,6 @@ public class Game extends AppCompatActivity {
         time = Integer.parseInt(times[1]) * 1000;
         time += Integer.parseInt(times[0]) * 60 * 1000;
 
-        notes = new TreeMap<Integer, Character>();
         try {
             final InputStream file = getAssets().open(launcher.getStringExtra("textFile"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(file));
@@ -100,7 +169,7 @@ public class Game extends AppCompatActivity {
                 if(noteType == 'h') {
                     //do more stuff
                 }
-                notes.put((int)(timestamp * 1000), noteType);
+                notesOffScreen.add(new Note(noteType, (int) (timestamp * 1000)));
             }
         } catch(Exception e) {
             //shouldn't get here
@@ -116,48 +185,12 @@ public class Game extends AppCompatActivity {
         try {
             int resource = getResources().getIdentifier(name, "raw", getPackageName());
 
-            playSong(0, time, resource, notes);
+            playSong(0, time, resource /*, noteMap*/);
         } catch (Exception e) {
             //et_what.setText("Error");
         }
 
-
-
-
-       // playSong(1, 1, "test");
-
-
-
-
-
-
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //((Button) v).setText("" + v.getTranslationY());
-                ObjectAnimator animation = ObjectAnimator.ofFloat(
-                        v, "translationY", v.getTranslationY() + 250);
-                animation.setDuration(2000);
-                animation.start();
-
-                createNote('t', 2);
-
-            }
-        });
-
-*/
-    //createNote('t', 100);
-
         ImageView goZone = findViewById(R.id.goZone);
-        goZone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("onClick");
-                if(!nutes.isEmpty()) {
-                    removeNote(nutes.peek());
-                }
-            }
-        });
         rhythmMeter = (ProgressBar) findViewById(R.id.rhythmmeter);
         rhythmMeter.setMax(100);
         rhythmMeter.setProgress(50);
@@ -178,8 +211,18 @@ public class Game extends AppCompatActivity {
                         return true;
                     case MotionEvent.ACTION_UP:
                         x2 = event.getX();
+
+                        Note nextNote;
+                        if (!notesOnScreen.isEmpty()) {
+                            nextNote = notesOnScreen.peek();
+                        } else {
+                            //no notes to deal with; break combo (false input)
+                            newbo = 0;
+                            return true;
+                        }
+
                         try{
-                            Character newt = newts.peek();
+                            Character newt = nextNote.type;
                             if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
                                 if (x1 > x2) {
                                     System.out.println("LEFT");
@@ -187,9 +230,8 @@ public class Game extends AppCompatActivity {
                                         ImageView goZone = (ImageView) findViewById(R.id.goZone);
                                         target = goZone.getTop();
                                     }
-                                    ImageView img = (ImageView) findViewById(nutes.peek());
-                                    System.out.println(newt);
-                                    float y = img.getTranslationY();
+                                    float y = nextNote.getY();
+
                                     System.out.println(y);
                                     System.out.println(target);
                                     if (newt == 'l' &&  y + 100 > target) {
@@ -198,7 +240,6 @@ public class Game extends AppCompatActivity {
                                         newbo = 0;
                                     }
 
-                                    removeNote(nutes.peek());
 
 
                                 } else {
@@ -208,15 +249,12 @@ public class Game extends AppCompatActivity {
                                         ImageView goZone = (ImageView) findViewById(R.id.goZone);
                                         target = goZone.getTop();
                                     }
-                                    ImageView img = (ImageView) findViewById(nutes.peek());
-                                    float y = img.getTranslationY();
+                                    float y = nextNote.getY();
                                     if (newt == 'r' && y + 100 > target) {
                                         newbo++;
                                     } else {
                                         newbo = 0;
                                     }
-
-                                    removeNote(nutes.peek());
 
 
 
@@ -228,93 +266,25 @@ public class Game extends AppCompatActivity {
                                     ImageView goZone = (ImageView) findViewById(R.id.goZone);
                                     target = goZone.getTop();
                                 }
-                                ImageView img = (ImageView) findViewById(nutes.peek());
-                                float y = img.getTranslationY();
+                                float y = nextNote.getY();
                                 if (newt == 't' && y + 100 > target) {
                                     newbo++;
                                 } else {
                                     newbo = 0;
                                 }
 
-                                removeNote(nutes.peek());
-
-
-
-                            }
-                        } catch(Exception e) {
-                            //
-                        }
-                        break;
-                }
-                /*try{
-                    Character newt = newts.peek();
-                    if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
-                        if (x1 > x2) {
-                            System.out.println("LEFT");
-                            if (target == -1) {
-                                ImageView goZone = (ImageView) findViewById(R.id.goZone);
-                                target = goZone.getTop();
-                            }
-                            ImageView img = (ImageView) findViewById(nutes.peek());
-                            System.out.println(newt);
-                            float y = img.getTranslationY();
-                            System.out.println(y);
-                            System.out.println(target);
-                            if (newt == 'l' &&  y + 100 > target) {
-                                newbo++;
-                            } else {
-                                newbo = 0;
-                            }
-
-                            removeNote(nutes.peek());
-
-
-                                } else {
-                                    System.out.println("RIGHT");
-
-                            if (target == -1) {
-                                ImageView goZone = (ImageView) findViewById(R.id.goZone);
-                                target = goZone.getTop();
-                            }
-                            ImageView img = (ImageView) findViewById(nutes.peek());
-                            float y = img.getTranslationY();
-                            if (newt == 'r' && y + 100 > target) {
-                                newbo++;
-                            } else {
-                                newbo = 0;
-                            }
-
-                            removeNote(nutes.peek());
-
-
-
-                                }
-                            } else {
-                                System.out.println("TAP");
-
-                        if (target == -1) {
-                            ImageView goZone = (ImageView) findViewById(R.id.goZone);
-                            target = goZone.getTop();
-                        }
-                        ImageView img = (ImageView) findViewById(nutes.peek());
-                        float y = img.getTranslationY();
-                        if (newt == 't' && y + 100 > target) {
-                            newbo++;
-                        } else {
-                            newbo = 0;
-                        }
-
-                        removeNote(nutes.peek());
-
 
 
                             }
                         } catch(Exception e) {
                             //
                         }
+
+                        removeNextNote();
+
                         break;
                 }
-             */
+
             return true;
             }
         });
@@ -325,13 +295,16 @@ public class Game extends AppCompatActivity {
 
 
 
-    private void playSong(int delay, int time, int song, TreeMap<Integer, Character> notes) {
+    private void playSong(int delay, int time, int song) {
+
+        //delay functionality should probably be moved to setNoteTimers
+
         final int nestedsong = song;
         final int nestedtime = time;
-        TreeMap<Integer, Character> nutes = new TreeMap<Integer, Character>();
-        for(Map.Entry<Integer, Character> entry : notes.entrySet()) {
+        //TreeMap<Integer, Character> nutes = new TreeMap<Integer, Character>();
+        /*for(Map.Entry<Integer, Character> entry : notes.entrySet()) {
             nutes.put(entry.getKey() + delay, entry.getValue());
-        }
+        }*/
         mp = MediaPlayer.create(this, nestedsong);
 
         new Timer().schedule(
@@ -351,30 +324,29 @@ public class Game extends AppCompatActivity {
                     }
                 }, delay);
 
-        NoteTimer(nutes);
+        setNoteTimers();
     }
 
-    private void NoteTimer (TreeMap<Integer, Character> notes) {
+    private void setNoteTimers() {
 
-        //Timer timer = new Timer();
-        newNote = 0;
         final Runnable noteMove = new Runnable() {
             public void run() {
-                newNote++;
-                createNote(newNoteType, newNote);
+                Note nextNote = notesOffScreen.poll();
+                nextNote.draw();
+                notesOnScreen.addLast(nextNote);
             }
         };
         Timer timer = new Timer();
-        for(Map.Entry<Integer, Character> entry : notes.entrySet()) {
-            final Map.Entry<Integer, Character> entree = entry;
+
+
+        for(Note n : notesOffScreen) {
             timer.schedule(
                     new java.util.TimerTask() {
                         @Override
                         public void run() {
-                            newNoteType = entree.getValue();
                             runOnUiThread(noteMove);
                         }
-                    }, entry.getKey());
+                    }, n.timestamp);
         }
     }
 
@@ -395,95 +367,13 @@ public class Game extends AppCompatActivity {
         return true;
     }
 
-    public void createNote(char type, final int noteNumber){
-        ImageView iv = new ImageView(getApplicationContext());
 
-        ConstraintLayout parentLayout = (ConstraintLayout)findViewById(R.id.ConstraintLayout);
+    public void removeNextNote(){
 
-
-        //ImageView childView = new ImageView(this);
-        // set view id, else getId() returns -1
-
-
-        switch(type){
-            case 'l':
-                iv.setImageDrawable(getResources().getDrawable(R.drawable.noteleft));
-                newts.add('l');
-                break;
-            case 'r':
-                iv.setImageDrawable(getResources().getDrawable(R.drawable.noteright));
-                newts.add('r');
-                break;
-            case 't':
-                iv.setImageDrawable(getResources().getDrawable(R.drawable.notetap));
-                newts.add('t');
-                break;
-            default:
-                iv.setImageDrawable(getResources().getDrawable(R.drawable.notetap));
-                newts.add('t');
-                break;
-        }
-
-        ConstraintSet set = new ConstraintSet();
-
-        //iv.setId(View.generateViewId());// set to current note number?
-        iv.setId(noteNumber);
-        //ConstraintLayout current = (ConstraintLayout)findViewById(R.id.constraintLayout);
-        parentLayout.addView(iv, 0);
-        set.clone(parentLayout);
-        // connect start and end point of views, in this case top of child to top of parent.
-        set.connect(iv.getId(), ConstraintSet.TOP, parentLayout.getId(), ConstraintSet.TOP, 60);
-        set.connect(iv.getId(), ConstraintSet.LEFT, parentLayout.getId(), ConstraintSet.LEFT, 60);
-        set.connect(iv.getId(), ConstraintSet.RIGHT, parentLayout.getId(), ConstraintSet.RIGHT, 60);
-
-
-        // ... similarly add other constraints
-        set.applyTo(parentLayout);
-        iv.bringToFront();
-        iv.invalidate();
-        //RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-        //        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        //final TextView start = (TextView) findViewById(R.id.StartPoint);
-        //lp.addRule(RelativeLayout.BELOW, start.getId());
-        //iv.setLayoutParams(lp);
-        //final RelativeLayout r1 = (RelativeLayout) findViewById(R.id.ConstraintLayout);
-        //r1.addView(iv);
-        ObjectAnimator animation = ObjectAnimator.ofFloat(iv, "translationY", iv.getTranslationY() + 1400);
-        animation.setDuration(2000);
-        animation.setInterpolator(new LinearInterpolator());
-        animation.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-                nutes.add(noteNumber);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                nutes.poll();
-                newts.poll();
-                removeNote(noteNumber);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-
-
-        });
-        animation.start();
-
-    }
-
-    public void removeNote(int noteNumber){
         try {
-            ImageView note = (ImageView) findViewById(noteNumber);
+            Note nextNote = notesOnScreen.poll();
+            ImageView note = nextNote.image;
+            nextNote.animation.cancel();
             note.setVisibility(View.GONE);
             ConstraintLayout parentLayout = (ConstraintLayout) findViewById(R.id.ConstraintLayout);
             parentLayout.removeView(note);
