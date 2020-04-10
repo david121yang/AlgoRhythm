@@ -2,6 +2,7 @@ package com.example.algorhythm;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -16,10 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+
+import android.os.CountDownTimer;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -38,7 +43,7 @@ public class Game extends AppCompatActivity {
     private ArrayDeque<Note> notesOnScreen;
     private ProgressBar rhythmMeter;
     private ProgressBar songProgress;
-    static int newNote = 0;
+    static int newNote;
     private int songListPosition;
     private int oldbo = 0;
     private int newbo = 0;
@@ -53,8 +58,12 @@ public class Game extends AppCompatActivity {
         public final ImageView image;
         public final int timestamp;
 
-        public Note(char type, int time) {
-            this.ID = ++newNote;
+        Note(char type, int time) {
+            this(++newNote, type, time);
+        }
+
+        public Note(int ID, char type, int time) {
+            this.ID = ID;
             this.type = type;
             image = new ImageView(getApplicationContext());
             image.setId(ID);
@@ -100,7 +109,13 @@ public class Game extends AppCompatActivity {
             image.bringToFront();
             image.invalidate();
 
-            animation = ObjectAnimator.ofFloat(image, "translationY", image.getTranslationY() + 1600);
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE); // the results will be higher than using the activity context object or the getWindowManager() shortcut
+            wm.getDefaultDisplay().getMetrics(displayMetrics);
+            int screenHeight = displayMetrics.heightPixels;
+
+            animation = ObjectAnimator.ofFloat(image, "translationY", image.getTranslationY() + screenHeight);
             animation.setDuration(2000);
             animation.setInterpolator(new LinearInterpolator());
             animation.addListener(new Animator.AnimatorListener() {
@@ -115,8 +130,6 @@ public class Game extends AppCompatActivity {
                     //so that it doesn't just remove the next note
 
                     if (!notesOnScreen.isEmpty() && notesOnScreen.peek().ID == ID) {
-
-                        System.out.println("Automatically deleting");
                         removeNextNote();
                     }
 
@@ -160,6 +173,7 @@ public class Game extends AppCompatActivity {
             final InputStream file = getAssets().open(launcher.getStringExtra("textFile"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(file));
             int noteCount = Integer.parseInt(reader.readLine());
+            int currentTime = 0;
             for(int i = 0; i < noteCount; i++) {
                 String[] fields = reader.readLine().split(" ");
                 float timestamp = Float.parseFloat(fields[0]);
@@ -167,7 +181,7 @@ public class Game extends AppCompatActivity {
                 if(noteType == 'h') {
                     //do more stuff
                 }
-                notesOffScreen.add(new Note(noteType, (int) (timestamp * 1000)));
+                notesOffScreen.add(new Note(noteType, (int) (timestamp * 1000 - 1500)));
             }
         } catch(Exception e) {
             //shouldn't get here
@@ -194,8 +208,19 @@ public class Game extends AppCompatActivity {
         rhythmMeter.setProgress(50);
 
         songProgress = (ProgressBar) findViewById(R.id.songProgress);
-        //songProgress.setMax();
-        //songProgress.setProgress(0);
+        songProgress.setMax(time / 1000);
+        songProgress.setProgress(0);
+        //songProgress.setRotationX(180);
+        CountDownTimer songProgresstimer = new CountDownTimer(time, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                songProgress.setProgress(songProgress.getProgress() + 1);
+            }
+
+            public void onFinish() {
+
+            }
+        }.start();
 
 
         goZone.setOnTouchListener(new View.OnTouchListener() {
@@ -227,10 +252,10 @@ public class Game extends AppCompatActivity {
                             if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
                                 if (x1 > x2) {
                                     System.out.println("LEFT");
-                                    /*if (target == -1) {
-                                        //ImageView goZone = (ImageView) findViewById(R.id.goZone);
-                                        //target = goZone.getTop();
-                                    }*/
+                                    if (target == -1) {
+                                        ImageView goZone = (ImageView) findViewById(R.id.goZone);
+                                        target = goZone.getTop();
+                                    }
                                     float y = nextNote.getY();
 
                                     System.out.println(y);
@@ -241,7 +266,6 @@ public class Game extends AppCompatActivity {
                                         newbo = 0;
                                     }
 
-                                    removeNextNote();
 
 
                                 } else {
@@ -258,7 +282,6 @@ public class Game extends AppCompatActivity {
                                         newbo = 0;
                                     }
 
-                                    removeNextNote();
 
 
                                 }
@@ -276,13 +299,14 @@ public class Game extends AppCompatActivity {
                                     newbo = 0;
                                 }
 
-                                removeNextNote();
+
 
                             }
                         } catch(Exception e) {
                             //
                         }
 
+                        removeNextNote();
 
                         break;
                 }
@@ -333,11 +357,9 @@ public class Game extends AppCompatActivity {
 
         final Runnable noteMove = new Runnable() {
             public void run() {
-                if (!notesOffScreen.isEmpty()) {
-                    Note nextNote = notesOffScreen.poll();
-                    nextNote.draw();
-                    notesOnScreen.addLast(nextNote);
-                }
+                Note nextNote = notesOffScreen.poll();
+                nextNote.draw();
+                notesOnScreen.addLast(nextNote);
             }
         };
         Timer timer = new Timer();
@@ -375,19 +397,19 @@ public class Game extends AppCompatActivity {
     public void removeNextNote(){
 
         try {
-            Note nextNote;
-            if (!notesOnScreen.isEmpty()) {
-                nextNote = notesOnScreen.poll();
-            } else {
-                return;
-            }
+            Note nextNote = notesOnScreen.poll();
             ImageView note = nextNote.image;
             //nextNote.animation.cancel();
             note.setVisibility(View.GONE);
             ConstraintLayout parentLayout = (ConstraintLayout) findViewById(R.id.ConstraintLayout);
             parentLayout.removeView(note);
-
+            int newProgress = rhythmMeter.getProgress();
             if(oldbo != newbo && newbo > 0) {
+                newProgress += 5;
+                if (newProgress > 100){
+                    newProgress = 100;
+                }
+                rhythmMeter.setProgress(newProgress);
                 oldbo = newbo;
                 if(oldbo > maxbo) {
                     maxbo = oldbo;
@@ -397,6 +419,12 @@ public class Game extends AppCompatActivity {
                 if(newbo > 0) {
                     score++;
                 }
+                newProgress -= 10;
+                if (newProgress < 0){
+                    newProgress = 0;
+                }
+                rhythmMeter.setProgress(newProgress);
+                // check lose right here
                 oldbo = 0;
                 newbo = 0;
             }
