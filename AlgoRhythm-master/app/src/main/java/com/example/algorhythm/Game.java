@@ -178,14 +178,73 @@ public class Game extends AppCompatActivity {
                         return true;
                     case MotionEvent.ACTION_UP:
                         x2 = event.getX();
-                        System.out.println("x2 = " + x2);
-                        if (x1 - x2 > SWIPE_THRESHHOLD) {
-                            System.out.println("LEFT");
-                        } else if (x2 - x1 > SWIPE_THRESHHOLD) {
-                            System.out.println("RIGHT");
-                        } else {
-                            System.out.println("TAP");
+                        try{
+                            Character newt = newts.peek();
+                            if (Math.abs(x2 - x1) >= SWIPE_THRESHHOLD) {
+                                if (x1 > x2) {
+                                    System.out.println("LEFT");
+                                    if (target == -1) {
+                                        ImageView goZone = (ImageView) findViewById(R.id.goZone);
+                                        target = goZone.getTop();
+                                    }
+                                    ImageView img = (ImageView) findViewById(nutes.peek());
+                                    System.out.println(newt);
+                                    float y = img.getTranslationY();
+                                    System.out.println(y);
+                                    System.out.println(target);
+                                    if (newt == 'l' &&  y + 100 > target) {
+                                        newbo++;
+                                    } else {
+                                        newbo = 0;
+                                    }
+
+                                    removeNote(nutes.peek());
+
+
+                                } else {
+                                    System.out.println("RIGHT");
+
+                                    if (target == -1) {
+                                        ImageView goZone = (ImageView) findViewById(R.id.goZone);
+                                        target = goZone.getTop();
+                                    }
+                                    ImageView img = (ImageView) findViewById(nutes.peek());
+                                    float y = img.getTranslationY();
+                                    if (newt == 'r' && y + 100 > target) {
+                                        newbo++;
+                                    } else {
+                                        newbo = 0;
+                                    }
+
+                                    removeNote(nutes.peek());
+
+
+
+                                }
+                            } else {
+                                System.out.println("TAP");
+
+                                if (target == -1) {
+                                    ImageView goZone = (ImageView) findViewById(R.id.goZone);
+                                    target = goZone.getTop();
+                                }
+                                ImageView img = (ImageView) findViewById(nutes.peek());
+                                float y = img.getTranslationY();
+                                if (newt == 't' && y + 100 > target) {
+                                    newbo++;
+                                } else {
+                                    newbo = 0;
+                                }
+
+                                removeNote(nutes.peek());
+
+
+
+                            }
+                        } catch(Exception e) {
+                            //
                         }
+                        break;
                 }
                 /*try{
                     Character newt = newts.peek();
