@@ -17,11 +17,11 @@
         app:srcCompat="@drawable/tracklines" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/background"
         android:layout_width="347dp"
         android:layout_height="601dp"
         android:layout_marginStart="32dp"
-        android:background="@color/transparentBlue"
+        android:background="@color/transparentLightBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,8 +34,10 @@
         android:layout_width="211dp"
         android:layout_height="47dp"
         android:layout_marginBottom="32dp"
+        android:background="@color/brightBlue"
         android:fontFamily="@font/orbitron"
         android:text="Play Again"
+        android:textColor="@color/design_default_color_on_primary"
         app:layout_constraintBottom_toTopOf="@+id/songListButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.535"
@@ -46,8 +48,10 @@
         android:layout_width="202dp"
         android:layout_height="49dp"
         android:layout_marginBottom="64dp"
+        android:background="@color/brightBlue"
         android:fontFamily="@font/orbitron"
         android:text="Song List"
+        android:textColor="@color/design_default_color_on_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.535"
@@ -65,7 +69,7 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="@+id/background" />
 
     <TextView
         android:id="@+id/statNames"
@@ -148,7 +152,7 @@
         android:text="Notes Hit:"
         android:textColor="@color/design_default_color_on_primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.411" />
 
@@ -162,7 +166,7 @@
         android:textAlignment="textEnd"
         android:textColor="@color/design_default_color_on_primary"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView10"
-        app:layout_constraintEnd_toEndOf="@+id/imageView" />
+        app:layout_constraintEnd_toEndOf="@+id/background" />
 
     <TextView
         android:id="@+id/textView12"
@@ -191,6 +195,7 @@
         app:layout_constraintBottom_toTopOf="@+id/songListButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statNames" />
+        app:layout_constraintTop_toBottomOf="@+id/statNames"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
