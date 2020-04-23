@@ -52,6 +52,8 @@ public class Game extends AppCompatActivity {
     private float target = -1;
     private TextView comboBoard;
     private TextView scoreBoard;
+    private Timer noteTimer;
+    private Timer songTimer;
 
     class Note {
         public ObjectAnimator animation;
@@ -340,7 +342,8 @@ public class Game extends AppCompatActivity {
         }*/
         mp = MediaPlayer.create(this, nestedsong);
 
-        new Timer().schedule(
+        songTimer = new Timer();
+        songTimer.schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
@@ -371,11 +374,11 @@ public class Game extends AppCompatActivity {
                 }
             }
         };
-        Timer timer = new Timer();
+        noteTimer = new Timer();
 
 
         for(Note n : notesOffScreen) {
-            timer.schedule(
+            noteTimer.schedule(
                     new java.util.TimerTask() {
                         @Override
                         public void run() {
@@ -452,6 +455,8 @@ public class Game extends AppCompatActivity {
     }
 
     public void songEnd(){
+        noteTimer.cancel();
+        songTimer.cancel();
         Intent intent = new Intent(getApplicationContext(), SongSelect.class);
         SongItem s = SongSelect.jobItems.get(songListPosition);
 //        if(currentHighScore > s.getHighScore() || currentCombo > s.getMaxCombo() || currentRank.compareTo(s.getRank()) < 0)
