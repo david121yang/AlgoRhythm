@@ -1,22 +1,28 @@
 package com.example.algorhythm;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.SearchView;
 
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+//import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -36,8 +42,11 @@ public class SongSelect extends AppCompatActivity  {
     // would be changed to private instance if supported by
     // permanent back-end database
     static ArrayList<SongItem> jobItems;
+    static ArrayList<SongItem> searchedItems;
 
     private Context context;
+
+    private EditText input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +56,21 @@ public class SongSelect extends AppCompatActivity  {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         jobsList = (ExpandableListView) findViewById(R.id.joblist);
         // create ArrayList of courses from database
         if(jobItems == null) {
             jobItems = new ArrayList<SongItem>();
+            jobItems.add(new SongItem("Zea Shanty 2", 2, "1:00", "sea_shanty_2"));
             jobItems.add(new SongItem("Sea Shanty 2", 2, "1:00", "sea_shanty_2"));
             jobItems.add(new SongItem("through the fire and the flames 2", 4, "0:31","test.txt"));
+            jobItems.add(new SongItem("Eea Shanty 2", 2, "1:00", "sea_shanty_2"));
         }
         // make array adapter to bind arraylist to listview with new custom item layout
+
+        orderSongs();
         aa = new SongItemAdapter(this, R.layout.song_item_layout, jobItems);
         jobsList.setAdapter(aa);
 
@@ -70,15 +85,35 @@ public class SongSelect extends AppCompatActivity  {
                         .setAction("Action", null).show();
             }
         });
-    }
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_jobs, menu);
-        return true;
+
+
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.my_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search_icon);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                aa.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        return true;
+    }
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -114,6 +149,52 @@ public class SongSelect extends AppCompatActivity  {
         }
         // if resultCode == RESULT_CANCELED no need to update display
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void orderSongs() {
+        //jobItems.sort(new SongSorter());
+        sort(jobItems, 0, jobItems.size() - 1);
+    }
+
+    private void sort(ArrayList<SongItem> a, int low, int high) {
+        if (low < high) {
+            int pi = partition(a, low, high);
+
+            sort(a, low, pi - 1);
+            sort(a, pi + 1, high);
+        }
+    }
+
+    private int partition(ArrayList<SongItem> a, int low, int high) {
+        //SongSorter sorter = new SongSorter();
+        //s1.getTitle().compareToIgnoreCase(s1.getTitle());
+        SongItem pivot = a.get(high);
+        int i = low - 1;
+        for(int j = low; j < high; j++) {
+            if(a.get(j).getTitle().compareToIgnoreCase(pivot.getTitle()) < 0) {
+                i++;
+
+                SongItem temp = a.get(i);
+                a.set(i, a.get(j));
+                a.set(j, temp);
+            }
+        }
+        SongItem temp = a.get(i + 1);
+        a.set(i + 1, a.get(high));
+        a.set(high, temp);
+
+        return i + 1;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+
+        return super.onOptionsItemSelected(item);
     }
     /*
     // for a long click on a menu item use ContextMenu

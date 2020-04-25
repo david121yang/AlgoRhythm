@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,7 +21,7 @@ import java.util.List;
 
 /**
  */
-public class SongItemAdapter extends BaseExpandableListAdapter {
+public class SongItemAdapter extends BaseExpandableListAdapter implements Filterable {
 
     private int resource;
     private Context context;
@@ -27,12 +29,14 @@ public class SongItemAdapter extends BaseExpandableListAdapter {
     SongItem realjb;
 
     private List<SongItem> items;
+    private List<SongItem> copied;
 
     public SongItemAdapter(Context ctx, int res, List<SongItem> items)
     {
         this.context = ctx;
         this.resource = res;
         this.items = items;
+        this.copied = new ArrayList<>(items);
     }
 
     @Override
@@ -178,6 +182,42 @@ public class SongItemAdapter extends BaseExpandableListAdapter {
 
         return jobView;
     }
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
+
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<SongItem> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(copied);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (SongItem si : copied) {
+                    if(si.getTitle().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(si);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            items.clear();
+            items.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
 }
