@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ResultsScreen"></activity>
+        <activity android:name=".PauseScreen"></activity>
+        <activity android:name=".ResultsScreen" />
         <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings"

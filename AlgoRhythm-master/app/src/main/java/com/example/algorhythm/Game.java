@@ -26,6 +26,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ public class Game extends AppCompatActivity {
     private TextView scoreBoard;
     private Timer noteTimer;
     private Timer songTimer;
+    private ImageButton pauseButton;
 
     class Note {
         public ObjectAnimator animation;
@@ -324,6 +327,20 @@ public class Game extends AppCompatActivity {
             }
         });
 
+        pauseButton = (ImageButton)findViewById(R.id.pauseButton);
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                noteTimer.cancel();
+                mp.stop();
+                songTimer.cancel();
+                Intent intent = new Intent(getApplicationContext(), PauseScreen.class);
+                intent.putExtra("songName", SongSelect.jobItems.get(songListPosition).getTitle());
+                intent.putExtra("position", launcher.getIntExtra("position", 0));
+                intent.putExtra("length", launcher.getStringExtra("length"));
+                intent.putExtra("textFile", launcher.getStringExtra("textFile"));
+                startActivity(intent);
+            }
+        });
 
     }
 
