@@ -26,6 +26,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -52,6 +54,9 @@ public class Game extends AppCompatActivity {
     private float target = -1;
     private TextView comboBoard;
     private TextView scoreBoard;
+    private Timer noteTimer;
+    private Timer songTimer;
+    private ImageButton pauseButton;
 
     class Note {
         public ObjectAnimator animation;
@@ -322,6 +327,20 @@ public class Game extends AppCompatActivity {
             }
         });
 
+        pauseButton = (ImageButton)findViewById(R.id.pauseButton);
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                noteTimer.cancel();
+                mp.stop();
+                songTimer.cancel();
+                Intent intent = new Intent(getApplicationContext(), PauseScreen.class);
+                intent.putExtra("songName", SongSelect.jobItems.get(songListPosition).getTitle());
+                intent.putExtra("position", launcher.getIntExtra("position", 0));
+                intent.putExtra("length", launcher.getStringExtra("length"));
+                intent.putExtra("textFile", launcher.getStringExtra("textFile"));
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -340,7 +359,8 @@ public class Game extends AppCompatActivity {
         }*/
         mp = MediaPlayer.create(this, nestedsong);
 
-        new Timer().schedule(
+        songTimer = new Timer();
+        songTimer.schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
@@ -351,7 +371,7 @@ public class Game extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         mp.stop();
-                                        songEnd();
+                                        songEnd(true);
                                     }
                                 }, nestedtime);
                     }
@@ -371,11 +391,11 @@ public class Game extends AppCompatActivity {
                 }
             }
         };
-        Timer timer = new Timer();
+        noteTimer = new Timer();
 
 
         for(Note n : notesOffScreen) {
-            timer.schedule(
+            noteTimer.schedule(
                     new java.util.TimerTask() {
                         @Override
                         public void run() {
@@ -439,6 +459,10 @@ public class Game extends AppCompatActivity {
                 }
                 rhythmMeter.setProgress(newProgress);
                 // check lose right here
+                if(rhythmMeter.getProgress() == 0) {
+                    mp.stop();
+                    songEnd(false);
+                }
                 oldbo = 0;
                 newbo = 0;
             }
@@ -451,11 +475,23 @@ public class Game extends AppCompatActivity {
 
     }
 
-    public void songEnd(){
-        Intent intent = new Intent(getApplicationContext(), SongSelect.class);
+    public void songEnd(boolean complete){
+        noteTimer.cancel();
+        songTimer.cancel();
+        String rank = "A";
+        if(!complete) rank = "F";
         SongItem s = SongSelect.jobItems.get(songListPosition);
 //        if(currentHighScore > s.getHighScore() || currentCombo > s.getMaxCombo() || currentRank.compareTo(s.getRank()) < 0)
-        SongSelect.jobItems.get(songListPosition).updateScore(Math.max(s.getHighScore(), score), Math.max(maxbo, s.getMaxCombo()), "?");
+        SongSelect.jobItems.get(songListPosition).updateScore(Math.max(s.getHighScore(), score), Math.max(maxbo, s.getMaxCombo()), rank);
+        Intent intent = new Intent(getApplicationContext(), ResultsScreen.class);
+        intent.putExtra("complete", complete);
+        intent.putExtra("songName", SongSelect.jobItems.get(songListPosition).getTitle());
+        intent.putExtra("score", score);
+        intent.putExtra("maxCombo", maxbo);
+        intent.putExtra("rank", rank);
+        intent.putExtra("position", launcher.getIntExtra("position", 0));
+        intent.putExtra("length", launcher.getStringExtra("length"));
+        intent.putExtra("textFile", launcher.getStringExtra("textFile"));
         startActivity(intent);
     }
 }

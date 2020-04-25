@@ -61,7 +61,8 @@
                 android:fontFamily="@font/orbitron"
                 android:onClick="goToSongSelect"
                 android:text="Play"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@color/design_default_color_on_primary" />
 
             <Space
                 android:layout_width="match_parent"
@@ -75,7 +76,8 @@
                 android:fontFamily="@font/orbitron"
                 android:onClick="goToImportSong"
                 android:text="Import Song"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@color/design_default_color_on_primary" />
 
             <Space
                 android:layout_width="match_parent"
@@ -96,7 +98,8 @@
                     android:background="@color/brightBlue"
                     android:fontFamily="@font/orbitron"
                     android:text="Store"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    android:textColor="@color/design_default_color_on_primary" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -112,7 +115,8 @@
                     android:fontFamily="@font/orbitron"
                     android:onClick="goToSettings"
                     android:text="Settings"
-                    android:textAllCaps="false" />
+                    android:textAllCaps="false"
+                    android:textColor="@color/design_default_color_on_primary" />
 
             </LinearLayout>
 
