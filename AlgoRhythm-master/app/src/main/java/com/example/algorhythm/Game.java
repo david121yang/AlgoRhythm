@@ -64,6 +64,8 @@ public class Game extends AppCompatActivity {
     private Timer songTimer;
     private ImageButton pauseButton;
     private String path;
+    private int notesHit;
+    private int noteCount;
 
     class Note {
         public ObjectAnimator animation;
@@ -180,6 +182,8 @@ public class Game extends AppCompatActivity {
                     2);
         }
 
+        notesHit = 0;
+
         scoreBoard = (TextView) findViewById(R.id.score);
         comboBoard = (TextView) findViewById(R.id.combo);
 
@@ -200,7 +204,7 @@ public class Game extends AppCompatActivity {
         try {
             final InputStream file = getAssets().open(launcher.getStringExtra("textFile"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(file));
-            int noteCount = Integer.parseInt(reader.readLine());
+            noteCount = Integer.parseInt(reader.readLine());
             int currentTime = 0;
             for(int i = 0; i < noteCount; i++) {
                 String[] fields = reader.readLine().split(" ");
@@ -300,6 +304,7 @@ public class Game extends AppCompatActivity {
                                     System.out.println(target);
                                     if (newt == 'l' &&  y + 100 > target && y < target + 300) {
                                         newbo++;
+                                        notesHit++;
                                     } else {
                                         newbo = 0;
                                     }
@@ -316,6 +321,7 @@ public class Game extends AppCompatActivity {
                                     float y = nextNote.getY();
                                     if (newt == 'r' &&  y + 100 > target && y < target + 300) {
                                         newbo++;
+                                        notesHit++;
                                     } else {
                                         newbo = 0;
                                     }
@@ -333,6 +339,7 @@ public class Game extends AppCompatActivity {
                                 float y = nextNote.getY();
                                 if (newt == 't' &&  y + 100 > target && y < target + 300) {
                                     newbo++;
+                                    notesHit++;
                                 } else {
                                     newbo = 0;
                                 }
@@ -548,6 +555,8 @@ public class Game extends AppCompatActivity {
         intent.putExtra("score", score);
         intent.putExtra("maxCombo", maxbo);
         intent.putExtra("rank", rank);
+        intent.putExtra("notesHit", notesHit);
+        intent.putExtra("noteCount", noteCount);
         intent.putExtra("position", launcher.getIntExtra("position", 0));
         intent.putExtra("length", launcher.getStringExtra("length"));
         intent.putExtra("textFile", launcher.getStringExtra("textFile"));

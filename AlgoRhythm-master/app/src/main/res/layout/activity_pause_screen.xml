@@ -33,14 +33,13 @@
         android:id="@+id/tv_completeOrFailed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/orbitron"
         android:text="Paused"
         android:textAlignment="center"
         android:textColor="@color/design_default_color_on_primary"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/background" />
 

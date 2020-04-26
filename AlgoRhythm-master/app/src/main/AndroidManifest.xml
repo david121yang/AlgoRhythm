@@ -12,8 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:requestLegacyExternalStorage="true">
-        <activity android:name=".PauseScreen"></activity>
-        <activity android:name=".ResultsScreen" />
+        <activity android:name=".PauseScreen"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ResultsScreen"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings"
@@ -42,6 +44,8 @@
             android:label="Game"
             android:parentActivityName=".SongSelect"
             android:theme="@style/AppTheme.NoActionBar" />
+
+
 
         <meta-data
             android:name="preloaded_fonts"

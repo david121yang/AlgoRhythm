@@ -46,7 +46,8 @@ public class ResultsScreen extends AppCompatActivity {
         songName.setText(launcher.getStringExtra("songName"));
         score.setText(launcher.getIntExtra("score", 0)+"");
         maxCombo.setText(launcher.getIntExtra("maxCombo", 0)+"");
-        notesHit.setText("124");
+        notesHit.setText(launcher.getIntExtra("notesHit", 0)+"/"
+                +launcher.getIntExtra("noteCount",0));
         rank.setText(launcher.getStringExtra("rank"));
         Log.d("as","shole");
 
