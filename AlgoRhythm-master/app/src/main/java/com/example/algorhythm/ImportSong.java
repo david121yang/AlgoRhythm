@@ -1,6 +1,8 @@
 package com.example.algorhythm;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -8,6 +10,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.provider.ContactsContract;
 import android.view.View;
@@ -35,8 +39,16 @@ public class ImportSong extends AppCompatActivity {
 
         selector.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ImportSong.this, AddSong.class);
-                startActivity(intent);
+                int permissionCheck2 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (permissionCheck2 != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(ImportSong.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE},
+                            1);
+                } else {
+                    Intent intent = new Intent(ImportSong.this, AddSong.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -51,6 +63,7 @@ public class ImportSong extends AppCompatActivity {
 
         create.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 if(ImportSong.path.equals("")) {
                     ImportSong.title.setText("");
                     ImportSong.songName = "";
