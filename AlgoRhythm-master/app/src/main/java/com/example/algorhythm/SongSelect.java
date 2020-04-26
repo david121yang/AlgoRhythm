@@ -3,6 +3,7 @@ package com.example.algorhythm;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.CaseMap;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -67,6 +68,9 @@ public class SongSelect extends AppCompatActivity  {
             jobItems.add(new SongItem("Sea Shanty 2", 2, "1:00", "sea_shanty_2", null));
             jobItems.add(new SongItem("through the fire and the flames 2", 4, "0:31","test.txt", null));
             jobItems.add(new SongItem("Eea Shanty 2", 2, "1:00", "sea_shanty_2", null));
+            for(SongItem item : TitleScreen.tempArray) {
+                jobItems.add(item);
+            }
         }
         // make array adapter to bind arraylist to listview with new custom item layout
 

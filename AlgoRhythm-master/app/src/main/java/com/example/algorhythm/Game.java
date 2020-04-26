@@ -229,8 +229,9 @@ public class Game extends AppCompatActivity {
             } else {
                 System.out.println(path);
                 Uri resource = Uri.parse(path);
-                mp = MediaPlayer.create(this, resource);
-                mp.start();
+                playSong(0, time, resource);
+                //mp = MediaPlayer.create(this, resource);
+                //mp.start();
                 //playSong(0, time, resource);
             }
         } catch (Exception e) {

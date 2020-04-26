@@ -7,7 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class TitleScreen extends AppCompatActivity {
+
+    public static ArrayList<SongItem> tempArray = new ArrayList<SongItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

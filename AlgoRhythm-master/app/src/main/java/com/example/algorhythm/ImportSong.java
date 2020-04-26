@@ -57,9 +57,15 @@ public class ImportSong extends AppCompatActivity {
                     ImportSong.path = "";
                     finish();
                 } else {
-                    SongItem song = new SongItem(ImportSong.songName, 2,"1:00","sea_shanty_2", ImportSong.path);
-                    SongSelect.jobItems.add(song);
-                    //SongSelect.searchedItems.add(song);
+                    try {
+                        SongItem song = new SongItem(ImportSong.songName, 2, "1:00", "sea_shanty_2", ImportSong.path);
+                        SongSelect.jobItems.add(song);
+                        finish();
+                    } catch(Exception e) {
+                        SongItem song = new SongItem(ImportSong.songName, 2, "1:00", "sea_shanty_2", ImportSong.path);
+                        TitleScreen.tempArray.add(song);
+                        finish();
+                    }
                 }
             }
         });
