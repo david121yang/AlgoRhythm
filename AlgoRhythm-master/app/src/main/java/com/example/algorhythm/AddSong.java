@@ -25,6 +25,7 @@ public class AddSong extends AppCompatActivity {
 
     private ListView listView;
     private String songNames[];
+    private ArrayList<String> songs3;
 
 
     @Override
@@ -112,10 +113,17 @@ public class AddSong extends AppCompatActivity {
                 }
 
                 String path = songNames[position];
-                File file = new File(path);
-                Uri resource = Uri.fromFile(file);
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), resource);
-                mp.start();
+                String name = songs3.get(position);
+                //File file = new File(path);
+                //Uri resource = Uri.fromFile(file);
+                //MediaPlayer mp = MediaPlayer.create(getApplicationContext(), resource);
+                //mp.start();
+                ImportSong.songName = name;
+                ImportSong.path = path;
+                System.out.println(name);
+                System.out.println(path);
+                ImportSong.title.setText(name);
+                finish();
             }
         });
     }
@@ -178,11 +186,12 @@ public class AddSong extends AppCompatActivity {
         String[] songs = new String[count];
         String[] mAudioPath = new String[count];
         ArrayList<String> songs2 = new ArrayList<String>();
+        songs3 = new ArrayList<String>();
         int i = 0;
         if (mCursor.moveToFirst()) {
             do {
                 //songs[i] = mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME));
-                //songs2.add(mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)));
+                songs3.add(mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)));
                 songs2.add(mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)));
                 i++;
             } while (mCursor.moveToNext());

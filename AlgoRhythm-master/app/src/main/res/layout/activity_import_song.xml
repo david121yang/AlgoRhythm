@@ -57,4 +57,29 @@
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="@+id/createTrackButton" />
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="233dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="300dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/createTrackButton"
+        app:layout_constraintEnd_toStartOf="@+id/songSelect"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout3" />
+
+    <Button
+        android:id="@+id/songSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="300dp"
+        android:text="Select Song"
+        app:layout_constraintBottom_toTopOf="@+id/createTrackButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout3" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,8 +31,8 @@ public class TitleScreen extends AppCompatActivity {
     }
 
     public void goToImportSong(View view) {
-        //Intent intent = new Intent(TitleScreen.this, ImportSong.class);
-        Intent intent = new Intent(TitleScreen.this, AddSong.class);
+        Intent intent = new Intent(TitleScreen.this, ImportSong.class);
+        //Intent intent = new Intent(TitleScreen.this, AddSong.class);
         startActivity(intent);
     }
 

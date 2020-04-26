@@ -228,7 +228,7 @@ public class Game extends AppCompatActivity {
                 playSong(0, time, resource /*, noteMap*/);
             } else {
                 System.out.println(path);
-                Uri resource = Uri.parse(Environment.getExternalStorageDirectory().getPath() + path);
+                Uri resource = Uri.parse(path);
                 mp = MediaPlayer.create(this, resource);
                 mp.start();
                 //playSong(0, time, resource);
