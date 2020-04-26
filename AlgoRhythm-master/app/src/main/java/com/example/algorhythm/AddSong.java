@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -102,7 +103,19 @@ public class AddSong extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int permissionCheck2 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (permissionCheck2 != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(AddSong.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE},
+                            1);
+                }
 
+                String path = songNames[position];
+                File file = new File(path);
+                Uri resource = Uri.fromFile(file);
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), resource);
+                mp.start();
             }
         });
     }

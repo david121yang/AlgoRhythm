@@ -1,10 +1,13 @@
 package com.example.algorhythm;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 
 import java.io.BufferedReader;
@@ -16,9 +19,12 @@ import java.util.Timer;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
@@ -57,6 +63,7 @@ public class Game extends AppCompatActivity {
     private Timer noteTimer;
     private Timer songTimer;
     private ImageButton pauseButton;
+    private String path;
 
     class Note {
         public ObjectAnimator animation;
@@ -164,6 +171,15 @@ public class Game extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
 
+        int permissionCheck2 = ContextCompat.checkSelfPermission(Game.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck2 != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("Nope");
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE},
+                    2);
+        }
+
         scoreBoard = (TextView) findViewById(R.id.score);
         comboBoard = (TextView) findViewById(R.id.combo);
 
@@ -174,6 +190,8 @@ public class Game extends AppCompatActivity {
         launcher = getIntent();
         songListPosition = launcher.getIntExtra("position", 0);
         //et_what.setText(launcher.getStringExtra("name"));
+
+        path = launcher.getStringExtra("path");
 
         String[] times = (launcher.getStringExtra("length")).split(":");
         time = Integer.parseInt(times[1]) * 1000;
@@ -205,9 +223,16 @@ public class Game extends AppCompatActivity {
         name = name.replace(" ", "_");
         //et_what.setText(Integer.toString(time));
         try {
-            int resource = getResources().getIdentifier(name, "raw", getPackageName());
-
-            playSong(0, time, resource /*, noteMap*/);
+            if(path == null) {
+                int resource = getResources().getIdentifier(name, "raw", getPackageName());
+                playSong(0, time, resource /*, noteMap*/);
+            } else {
+                System.out.println(path);
+                Uri resource = Uri.parse(Environment.getExternalStorageDirectory().getPath() + path);
+                mp = MediaPlayer.create(this, resource);
+                mp.start();
+                //playSong(0, time, resource);
+            }
         } catch (Exception e) {
             //et_what.setText("Error");
         }
@@ -352,6 +377,39 @@ public class Game extends AppCompatActivity {
         //delay functionality should probably be moved to setNoteTimers
 
         final int nestedsong = song;
+        final int nestedtime = time;
+        //TreeMap<Integer, Character> nutes = new TreeMap<Integer, Character>();
+        /*for(Map.Entry<Integer, Character> entry : notes.entrySet()) {
+            nutes.put(entry.getKey() + delay, entry.getValue());
+        }*/
+        mp = MediaPlayer.create(this, nestedsong);
+
+        songTimer = new Timer();
+        songTimer.schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        mp.start();
+
+                        new Timer().schedule(
+                                new java.util.TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        mp.stop();
+                                        songEnd(true);
+                                    }
+                                }, nestedtime);
+                    }
+                }, delay);
+
+        setNoteTimers();
+    }
+
+    private void playSong(int delay, int time, Uri song) {
+
+        //delay functionality should probably be moved to setNoteTimers
+
+        final Uri nestedsong = song;
         final int nestedtime = time;
         //TreeMap<Integer, Character> nutes = new TreeMap<Integer, Character>();
         /*for(Map.Entry<Integer, Character> entry : notes.entrySet()) {

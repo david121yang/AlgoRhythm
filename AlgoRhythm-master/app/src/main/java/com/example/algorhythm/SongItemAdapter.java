@@ -1,9 +1,11 @@
 package com.example.algorhythm;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,9 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +81,7 @@ public class SongItemAdapter extends BaseExpandableListAdapter implements Filter
                 intent.putExtra("length", realjb.getLength());
                 intent.putExtra("textFile", realjb.getTextFileName());
                 intent.putExtra("position", realPosition);
+                intent.putExtra("path", realjb.getPath());
                 context.startActivity(intent);
             }
         });
