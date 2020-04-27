@@ -557,7 +557,21 @@ public class Game extends AppCompatActivity {
     public void songEnd(boolean complete){
         noteTimer.cancel();
         songTimer.cancel();
-        String rank = "A";
+        float Score;
+        Score = ((((float) notesHit) / noteCount) * 90) + 10 * (((float) maxbo) / (float) noteCount);
+        String rank;
+        if (score >= 90.0)
+            rank = "A";
+        else if (score >= 80.0)
+            rank = "B";
+        else if (score >= 70.0)
+            rank = "C";
+        else if (score >= 60.0)
+            rank = "D";
+        else
+            rank = "F";
+
+
         if(!complete) rank = "F";
         SongItem s = SongSelect.jobItems.get(songListPosition);
 //        if(currentHighScore > s.getHighScore() || currentCombo > s.getMaxCombo() || currentRank.compareTo(s.getRank()) < 0)
