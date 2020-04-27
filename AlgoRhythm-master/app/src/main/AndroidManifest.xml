@@ -40,7 +40,8 @@
         </activity>
         <activity
             android:name=".AddSong"
-            android:label="Select Song" />
+            android:label="Select Song"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Game"
             android:label="Game"
