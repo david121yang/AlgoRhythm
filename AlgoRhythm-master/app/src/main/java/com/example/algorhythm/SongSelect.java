@@ -157,7 +157,39 @@ public class SongSelect extends AppCompatActivity  {
 
     private void orderSongs() {
         //jobItems.sort(new SongSorter());
-        sort(jobItems, 0, jobItems.size() - 1);
+        ArrayList<SongItem> one = new ArrayList<SongItem>();
+        ArrayList<SongItem> two = new ArrayList<SongItem>();
+        ArrayList<SongItem> three = new ArrayList<SongItem>();
+        ArrayList<SongItem> four = new ArrayList<SongItem>();
+        ArrayList<SongItem> five = new ArrayList<SongItem>();
+        for(SongItem song : jobItems) {
+            if(song.getDifficulty() == 1) {
+                one.add(song);
+            } else if(song.getDifficulty() == 2) {
+                two.add(song);
+            } else if(song.getDifficulty() == 3) {
+                three.add(song);
+            } else if(song.getDifficulty() == 4) {
+                four.add(song);
+            } else {
+                five.add(song);
+            }
+        }
+
+        sort(one, 0, one.size() - 1);
+        sort(two, 0, two.size() - 1);
+        sort(three, 0, three.size() - 1);
+        sort(four, 0, four.size() - 1);
+        sort(five, 0, five.size() - 1);
+
+        jobItems.clear();
+        jobItems.addAll(one);
+        jobItems.addAll(two);
+        jobItems.addAll(three);
+        jobItems.addAll(four);
+        jobItems.addAll(five);
+
+        //sort(jobItems, 0, jobItems.size() - 1);
     }
 
     private void sort(ArrayList<SongItem> a, int low, int high) {
