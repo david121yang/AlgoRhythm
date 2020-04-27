@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -51,7 +52,9 @@ public class Game extends AppCompatActivity {
     private ArrayDeque<Note> notesOnScreen;
     private ProgressBar rhythmMeter;
     private ProgressBar songProgress;
+    private float vol;
     static int newNote;
+    private SharedPreferences sharedPrefs;
     private int songListPosition;
     private int oldbo = 0;
     private int newbo = 0;
@@ -181,6 +184,13 @@ public class Game extends AppCompatActivity {
                             Manifest.permission.READ_EXTERNAL_STORAGE},
                     2);
         }
+        sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        int maxVolume = 101;
+        int volume = sharedPrefs.getInt("volume", 100);
+        boolean hapticsOn = sharedPrefs.getBoolean("hapticsOn", true);
+
+        vol = (float) (1 - (Math.log(maxVolume - volume) / Math.log(maxVolume)));
+
 
         notesHit = 0;
 
@@ -391,7 +401,7 @@ public class Game extends AppCompatActivity {
             nutes.put(entry.getKey() + delay, entry.getValue());
         }*/
         mp = MediaPlayer.create(this, nestedsong);
-
+        mp.setVolume(vol, vol);
         songTimer = new Timer();
         songTimer.schedule(
                 new java.util.TimerTask() {

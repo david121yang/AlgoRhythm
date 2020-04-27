@@ -30,9 +30,14 @@ public class Settings extends AppCompatActivity {
 
         // load shared preference values
         sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        SeekBar volume = (SeekBar) findViewById(R.id.musicVolume);
+        Switch hapticOn = (Switch) findViewById(R.id.vibrateSwitch);
 
+        int progress = sharedPrefs.getInt("volume", 100);
+        volume.setProgress(progress);
 
-        // set default value of seekbars
+        boolean checked = sharedPrefs.getBoolean("hapticsOn", true);
+        hapticOn.setChecked(checked);
     }
 
 
@@ -40,15 +45,15 @@ public class Settings extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPrefs.edit();
         SeekBar volume = (SeekBar) findViewById(R.id.musicVolume);
         int vol = volume.getProgress();
-        int max = volume.getMax();
+        //int max = volume.getMax();
 
-        float ratio = ((float) vol )/ max;
+        //float ratio = ((float) vol )/ max;
 
         Switch hapticOn = (Switch) findViewById(R.id.vibrateSwitch);
         boolean isChecked = hapticOn.isChecked();
 
 
-        editor.putFloat("volume", ratio);
+        editor.putInt("volume", vol);
         editor.putBoolean("hapticsOn", isChecked);
         editor.commit();
 
