@@ -218,19 +218,19 @@ public class Game extends AppCompatActivity {
             BufferedReader reader = new BufferedReader(new InputStreamReader(file));
             noteCount = Integer.parseInt(reader.readLine());
             int currentTime = 0;
-            for(int i = 0; i < noteCount; i++) {
+            for (int i = 0; i < noteCount; i++) {
                 String[] fields = reader.readLine().split(" ");
                 float timestamp = Float.parseFloat(fields[0]);
                 char noteType = fields[1].charAt(0);
-                if(noteType == 'h') {
+                if (noteType == 'h') {
                     //do more stuff
                 }
                 notesOffScreen.add(new Note(noteType, (int) (timestamp * 1000 - 1500)));
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             //shouldn't get here
-
         }
+
 
         name = launcher.getStringExtra("name");
         TextView sung = (TextView) findViewById(R.id.songName);
