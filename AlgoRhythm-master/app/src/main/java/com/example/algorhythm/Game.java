@@ -28,6 +28,7 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,6 +55,7 @@ public class Game extends AppCompatActivity {
     private ProgressBar songProgress;
     private float vol;
     static int newNote;
+    private boolean hapticOn;
     private SharedPreferences sharedPrefs;
     private int songListPosition;
     private int oldbo = 0;
@@ -187,8 +189,8 @@ public class Game extends AppCompatActivity {
         sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         int maxVolume = 101;
         int volume = sharedPrefs.getInt("volume", 100);
-        boolean hapticsOn = sharedPrefs.getBoolean("hapticsOn", true);
-
+        hapticOn = sharedPrefs.getBoolean("hapticsOn", true);
+        findViewById(R.id.goZone).setHapticFeedbackEnabled(hapticOn);
         vol = (float) (1 - (Math.log(maxVolume - volume) / Math.log(maxVolume)));
 
 
@@ -365,7 +367,8 @@ public class Game extends AppCompatActivity {
 
                         break;
                 }
-
+            if (hapticOn)
+                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             return true;
             }
         });
