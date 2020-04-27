@@ -28,6 +28,7 @@ public class AddSong extends AppCompatActivity {
     private String songNames[];
     private ArrayList<String> songs3;
     private ArrayList<String> songs2;
+    private ArrayList<String> songs4;
 
 
     @Override
@@ -56,28 +57,8 @@ public class AddSong extends AppCompatActivity {
         if(dir == null) {
             System.out.println("dir is null");
         }
+
         ArrayList<String> songs = readSongs(dir);
-
-        //ArrayList<String> songs = new ArrayList<String>();
-/*
-        songs.add("Music");
-        songs.add("Song");
-        songs.add("Songs");
-        songs.add("Songer");
-        songs.add("Music");
-        songs.add("Song");
-        songs.add("Songs");
-        songs.add("Songer");
-        songs.add("Music");
-        songs.add("Song");
-        songs.add("Songs");
-        songs.add("Songer");
-        songs.add("Music");
-        songs.add("Song");
-        songs.add("Songs");
-        songs.add("Songer");
-
- */
 
         songNames = new String[songs.size()];
 
@@ -124,6 +105,7 @@ public class AddSong extends AppCompatActivity {
                 //mp.start();
                 ImportSong.songName = name;
                 ImportSong.path = path;
+                ImportSong.duration = songs4.get(position);
                 System.out.println(name);
                 System.out.println(path);
                 ImportSong.title.setText(path);
@@ -131,54 +113,7 @@ public class AddSong extends AppCompatActivity {
             }
         });
     }
-    /*
-    private ArrayList<String> readSongs(final Context context) {
-        ArrayList<String> arrayList = new ArrayList<String>();
 
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {MediaStore.Audio.AudioColumns.DATA, MediaStore.Audio.AudioColumns.TITLE, MediaStore.Audio.AudioColumns.ALBUM, MediaStore.Audio.ArtistColumns.ARTIST,};
-        Cursor c = context.getContentResolver().query(uri, projection, MediaStore.Audio.Media.DATA + " like ? ", new String[]{"%utm%"}, null);
-        if(c == null) {
-            System.out.println("C is null");
-        }
-        if (c != null) {
-            while (c.moveToNext()) {
-                System.out.println("One found");
-                String path = c.getString(0);
-
-                arrayList.add(path);
-            }
-            c.close();
-        }
-
-        return arrayList;
-    }
-    */
-
-    /*
-    private ArrayList<String> readSongs(File root) {
-
-        ArrayList<String> arrayList = new ArrayList<String>();
-
-        File[] files = root.listFiles();
-
-        if(files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    arrayList.addAll(readSongs(file));
-                } else {
-                    if (file.getName().endsWith(".mp3")) {
-                        arrayList.add(file.getName());
-                    }
-                }
-            }
-        } else {
-            arrayList.add("NoFiles");
-        }
-
-        return arrayList;
-    }
-    */
     private ArrayList<String> readSongs(File root) {
         final Cursor mCursor = getContentResolver().query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -187,10 +122,9 @@ public class AddSong extends AppCompatActivity {
 
         int count = mCursor.getCount();
 
-        String[] songs = new String[count];
-        String[] mAudioPath = new String[count];
         ArrayList<String> songs2 = new ArrayList<String>();
         songs3 = new ArrayList<String>();
+        songs4 = new ArrayList<String>();
         int i = 0;
         if (mCursor.moveToFirst()) {
             do {
@@ -199,6 +133,20 @@ public class AddSong extends AppCompatActivity {
                 songs2.add(mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)));
                 String duration = mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
                 System.out.println(duration);
+                int realdur = Integer.parseInt(duration);
+                String minutes = String.valueOf(realdur / 60000);
+                if (realdur / 60000 == 0) {
+                    minutes = "0";
+                }
+                String seconds = String.valueOf((realdur % 60000) / 1000);
+                if ((realdur % 60000) / 1000 == 0) {
+                    seconds = "00";
+                }
+                if ((realdur % 60000) / 1000 < 10) {
+                    seconds = "0" + seconds;
+                }
+                String realTime = minutes + ":" + seconds;
+                songs4.add(realTime);
                 i++;
             } while (mCursor.moveToNext());
         }

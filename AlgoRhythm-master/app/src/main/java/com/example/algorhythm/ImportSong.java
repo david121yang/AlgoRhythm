@@ -24,6 +24,7 @@ public class ImportSong extends AppCompatActivity {
     public static TextView title;
     public static String songName = "";
     public static String path = "";
+    public static String duration = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,8 @@ public class ImportSong extends AppCompatActivity {
         selector.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 int permissionCheck2 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
-                if (permissionCheck2 != PackageManager.PERMISSION_GRANTED) {
+                int permissionCheck3 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (permissionCheck2 != PackageManager.PERMISSION_GRANTED || permissionCheck3 != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(ImportSong.this,
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                     Manifest.permission.READ_EXTERNAL_STORAGE},
@@ -57,6 +59,7 @@ public class ImportSong extends AppCompatActivity {
                 ImportSong.title.setText("");
                 ImportSong.songName = "";
                 ImportSong.path = "";
+                ImportSong.duration = "";
                 finish();
             }
         });
@@ -68,14 +71,15 @@ public class ImportSong extends AppCompatActivity {
                     ImportSong.title.setText("");
                     ImportSong.songName = "";
                     ImportSong.path = "";
+                    ImportSong.duration = "";
                     finish();
                 } else {
                     try {
-                        SongItem song = new SongItem(ImportSong.songName, 2, "1:00", "sea_shanty_2", ImportSong.path);
+                        SongItem song = new SongItem(ImportSong.songName, 2, duration, "sea_shanty_2", ImportSong.path);
                         SongSelect.jobItems.add(song);
                         finish();
                     } catch(Exception e) {
-                        SongItem song = new SongItem(ImportSong.songName, 2, "1:00", "sea_shanty_2", ImportSong.path);
+                        SongItem song = new SongItem(ImportSong.songName, 2, duration, "sea_shanty_2", ImportSong.path);
                         TitleScreen.tempArray.add(song);
                         finish();
                     }
