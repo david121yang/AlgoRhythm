@@ -29,7 +29,8 @@
             android:name=".SongSelect"
             android:label="@string/title_activity_song_select"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TitleScreen">
+        <activity android:name=".TitleScreen"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

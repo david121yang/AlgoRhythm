@@ -1,5 +1,8 @@
 package com.example.algorhythm;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,8 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.SeekBar;
+import android.widget.Switch;
 
 public class Settings extends AppCompatActivity {
+
+    private SharedPreferences sharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +29,37 @@ public class Settings extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // load shared preference values
+        sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
 
         // set default value of seekbars
     }
 
 
+    public void save(View view){
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        SeekBar volume = (SeekBar) findViewById(R.id.musicVolume);
+        int vol = volume.getProgress();
+        int max = volume.getMax();
+
+        float ratio = ((float) vol )/ max;
+
+        Switch hapticOn = (Switch) findViewById(R.id.vibrateSwitch);
+        boolean isChecked = hapticOn.isChecked();
+
+
+        editor.putFloat("volume", ratio);
+        editor.putBoolean("hapticsOn", isChecked);
+        editor.commit();
+
+        Intent intent = new Intent(Settings.this, TitleScreen.class);
+        startActivity(intent);
+    }
+
+    public void quit(View view){
+        Intent intent = new Intent(Settings.this, TitleScreen.class);
+        startActivity(intent);
+    }
     // button save operation for sharedprefs
     // cancel intent to main activity, discard changes
 }
