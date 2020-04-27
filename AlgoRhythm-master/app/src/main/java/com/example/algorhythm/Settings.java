@@ -16,8 +16,17 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // load shared preference values
+
+        // set default value of seekbars
     }
 
+
+    // button save operation for sharedprefs
+    // cancel intent to main activity, discard changes
 }
