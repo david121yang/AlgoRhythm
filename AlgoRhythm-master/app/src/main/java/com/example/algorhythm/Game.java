@@ -317,6 +317,8 @@ public class Game extends AppCompatActivity {
                                     if (newt == 'l' &&  y + 100 > target && y < target + 300) {
                                         newbo++;
                                         notesHit++;
+                                        if (hapticOn)
+                                            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                                     } else {
                                         newbo = 0;
                                     }
@@ -334,6 +336,8 @@ public class Game extends AppCompatActivity {
                                     if (newt == 'r' &&  y + 100 > target && y < target + 300) {
                                         newbo++;
                                         notesHit++;
+                                        if (hapticOn)
+                                            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                                     } else {
                                         newbo = 0;
                                     }
@@ -352,6 +356,8 @@ public class Game extends AppCompatActivity {
                                 if (newt == 't' &&  y + 100 > target && y < target + 300) {
                                     newbo++;
                                     notesHit++;
+                                    if (hapticOn)
+                                        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                                 } else {
                                     newbo = 0;
                                 }
@@ -367,8 +373,7 @@ public class Game extends AppCompatActivity {
 
                         break;
                 }
-            if (hapticOn)
-                v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
             return true;
             }
         });
