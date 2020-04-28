@@ -392,6 +392,7 @@ public class Game extends AppCompatActivity {
                 intent.putExtra("length", launcher.getStringExtra("length"));
                 intent.putExtra("textFile", launcher.getStringExtra("textFile"));
                 startActivity(intent);
+                finish();
             }
         });
 
