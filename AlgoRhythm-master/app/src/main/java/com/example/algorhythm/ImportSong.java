@@ -40,6 +40,7 @@ public class ImportSong extends AppCompatActivity {
         setContentView(R.layout.activity_import_song);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Button selector = (Button) findViewById(R.id.songSelect);
         title = (TextView) findViewById(R.id.textView3);
