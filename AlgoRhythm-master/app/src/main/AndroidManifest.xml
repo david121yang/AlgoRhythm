@@ -25,11 +25,12 @@
         <activity
             android:name=".ImportSong"
             android:label="@string/title_activity_import_song"
+            android:parentActivityName=".TitleScreen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SongSelect"
             android:label="@string/title_activity_song_select"
-            android:parentActivityName=".TitleScreen"
+
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".TitleScreen"
             android:theme="@style/AppTheme.NoActionBar">
@@ -42,6 +43,7 @@
         <activity
             android:name=".AddSong"
             android:label="Select Song"
+            android:parentActivityName=".ImportSong"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Game"

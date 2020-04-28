@@ -39,6 +39,7 @@ public class AddSong extends AppCompatActivity {
         setContentView(R.layout.stored_songs);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listView = (ListView) findViewById(R.id.list);
 
