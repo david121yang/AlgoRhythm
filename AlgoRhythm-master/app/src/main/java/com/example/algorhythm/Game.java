@@ -464,7 +464,7 @@ public class Game extends AppCompatActivity {
                         songEnd(true);
                     }
                 }, delay+nestedtime);
-        )
+
 
         setNoteTimers();
     }
