@@ -68,7 +68,7 @@ public class ResultsScreen extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), SongSelect.class);
                 //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                //finish();
+                finish();
             }
         });
 

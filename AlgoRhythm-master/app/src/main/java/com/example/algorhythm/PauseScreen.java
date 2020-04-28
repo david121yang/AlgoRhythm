@@ -29,12 +29,14 @@ public class PauseScreen extends AppCompatActivity {
                 intent.putExtra("length", launcher.getStringExtra("length"));
                 intent.putExtra("textFile", launcher.getStringExtra("textFile"));
                 startActivity(intent);
+                finish();
             }
         });
         songListButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SongSelect.class);
                 startActivity(intent);
+                finish();
             }
         });
 
