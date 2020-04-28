@@ -22,6 +22,8 @@ import androidx.core.content.ContextCompat;
 import java.io.File;
 import java.util.ArrayList;
 
+import core.be.tarsos.dsp.util.FFMPEGDownloader;
+
 public class AddSong extends AppCompatActivity {
 
     private ListView listView;
@@ -133,7 +135,7 @@ public class AddSong extends AppCompatActivity {
                 songs2.add(mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)));
                 String duration = mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
                 System.out.println(duration);
-                int realdur = Integer.parseInt(duration);
+                /*int realdur = Integer.parseInt(duration);
                 String minutes = String.valueOf(realdur / 60000);
                 if (realdur / 60000 == 0) {
                     minutes = "0";
@@ -144,8 +146,8 @@ public class AddSong extends AppCompatActivity {
                 }
                 if ((realdur % 60000) / 1000 < 10) {
                     seconds = "0" + seconds;
-                }
-                String realTime = minutes + ":" + seconds;
+                }*/
+                String realTime = "1:00";//minutes + ":" + seconds;
                 songs4.add(realTime);
                 i++;
             } while (mCursor.moveToNext());

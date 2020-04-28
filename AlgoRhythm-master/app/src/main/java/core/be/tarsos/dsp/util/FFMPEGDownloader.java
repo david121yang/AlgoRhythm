@@ -10,7 +10,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Logger;
 
 /**
- * Downloads a static ffmpeg binary for several platforms:
+ * Downloads a static x86_ffmpeg binary for several platforms:
  * Windows x64 and x32
  * Max OS X x64
  * Linux x32 and x64
@@ -38,20 +38,20 @@ public class FFMPEGDownloader {
 		String saveTo = new File(tempDirectory,filename).getAbsolutePath();
 		
 		if(new File(saveTo).exists()){
-			LOG.info("Found an already download ffmpeg static binary: " + saveTo);
+			LOG.info("Found an already download x86_ffmpeg static binary: " + saveTo);
 			ffmpegBinary = saveTo;
 		}else{
-			LOG.info("Started downloading an ffmpeg static binary from  " + url);
+			LOG.info("Started downloading an x86_ffmpeg static binary from  " + url);
 			downloadExecutable(saveTo);
 			
 			if(new File(saveTo).exists()){
-				LOG.info("Downloaded an ffmpeg static binary. Stored at: " + saveTo);
+				LOG.info("Downloaded an x86_ffmpeg static binary. Stored at: " + saveTo);
 				//make it executable
 				new File(saveTo).setExecutable(true);
 				ffmpegBinary = saveTo;
 			}else{
 				//Unable to download or unknown architecture
-				LOG.warning("Unable to find or download an ffmpeg static binary.  " + filename);
+				LOG.warning("Unable to find or download an x86_ffmpeg static binary.  " + filename);
 				ffmpegBinary = null;
 			}
 		}	

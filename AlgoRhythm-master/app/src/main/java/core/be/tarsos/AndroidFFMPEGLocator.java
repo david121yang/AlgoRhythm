@@ -17,7 +17,7 @@ import java.io.OutputStream;
 /**
  * <p>
  * The Android FFMPEG locator determines the current CPU architecture of the
- * running Android device and extracts a statically compiled <a href="http://ffmpeg.org">ffmpeg</a>
+ * running Android device and extracts a statically compiled <a href="http://ffmpeg.org">x86_ffmpeg</a>
  * binary from the assets folder to the temporary directory of the currently running Android application.
  * For this to work the assets folder should contain these binaries:
  * </p>
@@ -32,12 +32,12 @@ import java.io.OutputStream;
  * <p>
  * You can download these binaries 
  * <a href="https://github.com/hiteshsondhi88/ffmpeg-android/releases/download/v0.3.3/prebuilt-binaries.zip">here</a> 
- * and on the <a href="http://0110.be/releases/TarsosDSP/TarsosDSP-static-ffmpeg/Android/">TarsosDSP ffmpeg repository</a>.
+ * and on the <a href="http://0110.be/releases/TarsosDSP/TarsosDSP-static-ffmpeg/Android/">TarsosDSP x86_ffmpeg repository</a>.
  * Other architectures are currently not supported but could be included in later releases.
  * </p>
  *   
  * <p>
- * If you are a masochist and want to compile ffmpeg for Android yourself you can get your fix <a href="https://github.com/hiteshsondhi88/ffmpeg-android">here</a>
+ * If you are a masochist and want to compile x86_ffmpeg for Android yourself you can get your fix <a href="https://github.com/hiteshsondhi88/ffmpeg-android">here</a>
  * </p> 
  * @author Joren Six
  */
@@ -73,7 +73,7 @@ public class AndroidFFMPEGLocator {
                 break;
             default:
                 ffmpegFileName = null;
-                String message= "Could not determine your processor architecture correctly, no ffmpeg binary available.";
+                String message= "Could not determine your processor architecture correctly, no x86_ffmpeg binary available.";
                 Log.e(TAG,message);
                 throw new Error(message);
         }
@@ -98,9 +98,9 @@ public class AndroidFFMPEGLocator {
             while((length=inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer,0,length);
             }
-            //makes ffmpeg executable
+            //makes x86_ffmpeg executable
             ffmpegTargetLocation.setExecutable(true);
-            Log.i(TAG,"Unpacked ffmpeg binary " + ffmpegAssetFileName + " , extracted  " + ffmpegTargetLocation.length() + " bytes. Extracted to: " + ffmpegTargetLocation.getAbsolutePath());
+            Log.i(TAG,"Unpacked x86_ffmpeg binary " + ffmpegAssetFileName + " , extracted  " + ffmpegTargetLocation.length() + " bytes. Extracted to: " + ffmpegTargetLocation.getAbsolutePath());
         }catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -124,7 +124,7 @@ public class AndroidFFMPEGLocator {
 
     private static final File ffmpegTargetLocation(){
         String tempDirectory = System.getProperty("java.io.tmpdir");
-        File ffmpegTargetLocation = new File(tempDirectory,"ffmpeg");
+        File ffmpegTargetLocation = new File(tempDirectory, "x86_ffmpeg");
         return ffmpegTargetLocation;
     }
 

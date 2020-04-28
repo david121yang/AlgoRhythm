@@ -84,7 +84,7 @@ public class AudioDispatcherFactory {
 	 * {@link AudioDispatcher} The sub-process writes a WAV-header and
 	 * PCM-samples to standard out. The header is ignored and the PCM samples
 	 * are are captured and interpreted. Examples of executables that can
-	 * convert audio in any format and write to stdout are ffmpeg and avconv.
+	 * convert audio in any format and write to stdout are x86_ffmpeg and avconv.
 	 *
 	 * @param source
 	 *            The file or stream to capture.

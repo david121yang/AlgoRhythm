@@ -39,10 +39,10 @@ import core.be.tarsos.dsp.util.FFMPEGDownloader;
 /**
  * <p>
  * Decode audio files to PCM, mono, 16bits per sample, at any sample rate using
- * an external program. By default ffmpeg is used. Other
+ * an external program. By default x86_ffmpeg is used. Other
  * command Line  programs that are able to decode audio and pipe binary PCM
  * samples to STDOUT are possible as well (avconv, mplayer). 
- * To install ffmpeg on Debian: <code>apt-get install ffmpeg</code>.
+ * To install x86_ffmpeg on Debian: <code>apt-get install x86_ffmpeg</code>.
  * </p>
  * <p>
  * This adds support for a lot of audio formats and video container formats with
@@ -52,7 +52,7 @@ import core.be.tarsos.dsp.util.FFMPEGDownloader;
  * <p>
  * To see which audio decoders are supported, check
  * </p>
- * <code><pre>ffmpeg -decoders | grep -E "^A" | sort
+ * <code><pre>x86_ffmpeg -decoders | grep -E "^A" | sort
 avconv version 9.8, Copyright (c) 2000-2013 the Libav developers
   built on Aug 26 2013 09:52:20 with gcc 4.4.3 (Ubuntu 4.4.3-4ubuntu5.1)
 A... 8svx_exp             8SVX exponential
@@ -99,9 +99,9 @@ public class PipeDecoder {
 		
 		String path = System.getenv("PATH");
 		String arguments = " -ss %input_seeking%  %number_of_seconds% -i \"%resource%\" -vn -ar %sample_rate% -ac %channels% -sample_fmt s16 -f s16le pipe:1";
-		if(isAvailable("ffmpeg")){
-			LOG.info("found ffmpeg on the path (" + path + "). Will use ffmpeg for decoding media files.");
-			pipeCommand = "ffmpeg" + arguments;	
+		if(isAvailable("x86_ffmpeg")){
+			LOG.info("found x86_ffmpeg on the path (" + path + "). Will use x86_ffmpeg for decoding media files.");
+			pipeCommand = "x86_ffmpeg" + arguments;
 		}else if (isAvailable("avconv")){
 			LOG.info("found avconv on your path(" + path + "). Will use avconv for decoding media files.");
 			pipeCommand = "avconv" + arguments;
@@ -109,24 +109,24 @@ public class PipeDecoder {
 			if(isAndroid()) {
 				String tempDirectory = System.getProperty("java.io.tmpdir");
 				printErrorstream=true;
-				File f = new File(tempDirectory, "ffmpeg");
+				File f = new File(tempDirectory, "x86_ffmpeg");
 				if (f.exists() && f.length() > 1000000 && f.canExecute()) {
 					decoderBinaryAbsolutePath = f.getAbsolutePath();
 				} else {
-					LOG.severe("Could not find an ffmpeg binary for your Android system. Did you forget calling: 'new AndroidFFMPEGLocator(this);' ?");
-					LOG.severe("Tried to unpack a statically compiled ffmpeg binary for your architecture to: " + f.getAbsolutePath());
+					LOG.severe("Could not find an x86_ffmpeg binary for your Android system. Did you forget calling: 'new AndroidFFMPEGLocator(this);' ?");
+					LOG.severe("Tried to unpack a statically compiled x86_ffmpeg binary for your architecture to: " + f.getAbsolutePath());
 				}
 			}else{
-				LOG.warning("Dit not find ffmpeg or avconv on your path(" + path + "), will try to download it automatically.");
+				LOG.warning("Dit not find x86_ffmpeg or avconv on your path(" + path + "), will try to download it automatically.");
 				FFMPEGDownloader downloader = new FFMPEGDownloader();
 				decoderBinaryAbsolutePath = downloader.ffmpegBinary();
 				if(decoderBinaryAbsolutePath==null){
-					LOG.severe("Could not download an ffmpeg binary automatically for your system.");
+					LOG.severe("Could not download an x86_ffmpeg binary automatically for your system.");
 				}
 			}
 			if(decoderBinaryAbsolutePath == null){
 				pipeCommand = "false";
-				throw new Error("Decoding via a pipe will not work: Could not find an ffmpeg binary for your system");
+				throw new Error("Decoding via a pipe will not work: Could not find an x86_ffmpeg binary for your system");
 			}else{
 				pipeCommand = '"' + decoderBinaryAbsolutePath + '"' + arguments;
 			}
@@ -178,7 +178,7 @@ public class PipeDecoder {
 				@Override
 				public void close() throws IOException{
 					super.close();
-					// try to destroy the ffmpeg command after close
+					// try to destroy the x86_ffmpeg command after close
 					process.destroy();
 				}
 			};
@@ -211,7 +211,7 @@ public class PipeDecoder {
 		double duration = -1;
 		try {
 			//use " for windows compatibility!
-			String command = "ffmpeg -i \"%resource%\"";
+			String command = "x86_ffmpeg -i \"%resource%\"";
 			
 			command = command.replace("%resource%", resource);
 					
@@ -226,7 +226,7 @@ public class PipeDecoder {
 				@Override
 				public void close() throws IOException{
 					super.close();
-					// try to destroy the ffmpeg command after close
+					// try to destroy the x86_ffmpeg command after close
 					process.destroy();
 				}
 			};
