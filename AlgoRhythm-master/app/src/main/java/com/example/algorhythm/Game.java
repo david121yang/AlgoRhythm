@@ -225,7 +225,7 @@ public class Game extends AppCompatActivity {
                 if (noteType == 'h') {
                     //do more stuff
                 }
-                notesOffScreen.add(new Note(noteType, (int) (timestamp * 1000 - 1500)));
+                notesOffScreen.add(new Note(noteType, (int) (timestamp * 1000)));
             }
         } catch (Exception e) {
             //shouldn't get here
@@ -241,11 +241,11 @@ public class Game extends AppCompatActivity {
         try {
             if(path == null) {
                 int resource = getResources().getIdentifier(name, "raw", getPackageName());
-                playSong(0, time, resource /*, noteMap*/);
+                playSong(1500, time, resource /*, noteMap*/);
             } else {
                 System.out.println(path);
                 Uri resource = Uri.parse(path);
-                playSong(0, time, resource);
+                playSong(1500, time, resource);
                 //mp = MediaPlayer.create(this, resource);
                 //mp.start();
                 //playSong(0, time, resource);
