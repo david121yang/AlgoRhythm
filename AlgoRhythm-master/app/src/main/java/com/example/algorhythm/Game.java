@@ -384,6 +384,8 @@ public class Game extends AppCompatActivity {
                 noteTimer.cancel();
                 mp.stop();
                 songTimer.cancel();
+                notesOffScreen.clear();
+                notesOnScreen.clear();
                 Intent intent = new Intent(getApplicationContext(), PauseScreen.class);
                 intent.putExtra("songName", SongSelect.jobItems.get(songListPosition).getTitle());
                 intent.putExtra("position", launcher.getIntExtra("position", 0));
@@ -562,6 +564,8 @@ public class Game extends AppCompatActivity {
     public void songEnd(boolean complete){
         noteTimer.cancel();
         songTimer.cancel();
+        notesOnScreen.clear();
+        notesOffScreen.clear();
         float Score;
         Score = ((((float) notesHit) / noteCount) * 90) + 10 * (((float) maxbo) / (float) noteCount);
         String rank;
@@ -579,7 +583,6 @@ public class Game extends AppCompatActivity {
 
         if(!complete) rank = "F";
         SongItem s = SongSelect.jobItems.get(songListPosition);
-//        if(currentHighScore > s.getHighScore() || currentCombo > s.getMaxCombo() || currentRank.compareTo(s.getRank()) < 0)
         SongSelect.jobItems.get(songListPosition).updateScore(Math.max(s.getHighScore(), score), Math.max(maxbo, s.getMaxCombo()), rank);
         Intent intent = new Intent(getApplicationContext(), ResultsScreen.class);
         intent.putExtra("complete", complete);
@@ -595,5 +598,6 @@ public class Game extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
+
     }
 }
