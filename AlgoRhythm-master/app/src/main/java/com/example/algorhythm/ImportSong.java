@@ -19,6 +19,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class ImportSong extends AppCompatActivity {
 
     public static TextView title;
@@ -66,7 +71,6 @@ public class ImportSong extends AppCompatActivity {
 
         create.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 if(ImportSong.path.equals("")) {
                     ImportSong.title.setText("");
                     ImportSong.songName = "";
@@ -74,6 +78,17 @@ public class ImportSong extends AppCompatActivity {
                     ImportSong.duration = "";
                     finish();
                 } else {
+                    Algorhythm.importSong(songName);
+                    Algorhythm.songString();
+
+                    try {
+                        FileOutputStream fs = new FileOutputStream(songName);
+                        fs.write(Algorhythm.songString().getBytes());
+                        fs.close();
+                    } catch (IOException e) {
+                        System.err.println("File output failed.");
+                    }
+
                     try {
                         SongItem song = new SongItem(ImportSong.songName, 2, duration, "sea_shanty_2", ImportSong.path);
                         SongSelect.jobItems.add(song);

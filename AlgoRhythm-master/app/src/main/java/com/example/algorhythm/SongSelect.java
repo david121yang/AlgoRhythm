@@ -64,9 +64,9 @@ public class SongSelect extends AppCompatActivity  {
         // create ArrayList of courses from database
         if(jobItems == null) {
             jobItems = new ArrayList<SongItem>();
-            jobItems.add(new SongItem("Zea Shanty 2", 2, "1:00", "sea_shanty_2", "/Music/sea_shanty_2.mp3"));
-            jobItems.add(new SongItem("Sea Shanty 2", 2, "1:00", "sea_shanty_2", null));
-            jobItems.add(new SongItem("through the fire and the flames 2", 4, "0:31","test.txt", null));
+            jobItems.add(new SongItem("Zea Shanty 2", 2, "1:00", "test.txt", null));
+            jobItems.add(new SongItem("Sea Shanty 2", 2, "1:00", "test.txt", null));
+            jobItems.add(new SongItem("through the fire and the flames 2", 4, "0:31","song_output.txt", null));
             jobItems.add(new SongItem("Eea Shanty 2", 2, "1:00", "sea_shanty_2", null));
             for(SongItem item : TitleScreen.tempArray) {
                 jobItems.add(item);
