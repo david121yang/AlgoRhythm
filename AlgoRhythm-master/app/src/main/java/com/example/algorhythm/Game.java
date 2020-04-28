@@ -453,16 +453,18 @@ public class Game extends AppCompatActivity {
                     public void run() {
                         mp.start();
 
-                        new Timer().schedule(
-                                new java.util.TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        mp.stop();
-                                        songEnd(true);
-                                    }
-                                }, nestedtime);
+
                     }
                 }, delay);
+        songTimer.schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        mp.stop();
+                        songEnd(true);
+                    }
+                }, delay+nestedtime);
+        )
 
         setNoteTimers();
     }
