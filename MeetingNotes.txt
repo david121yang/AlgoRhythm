@@ -41,3 +41,31 @@ Meeting Notes
     -Met to finish any remaining bugs and merge all work
     -Updated codebase to be more object oriented
     -Updated readme and meeting notes. 
+
+4/15/20
+ -Divided up work and began research of next features
+    -Ryan - Algorithm for song generation based on mp3
+    -Peter - Searching and difficulty implementation for song list
+    -Dave - Victory, Defeat, Pause
+    -Bruce - Settings, Haptic feedback, Better visuals?
+4/19/20
+  -Everybody is tired
+  -Pause is turning out to be harder than anticipated
+  -Too much stuff to save?
+  -How to resume?
+  -Can you stop notes midway? Does resetting the level give too much advantage to pausing as an exploit?
+  -Basic progress on making level out of sound noise for algorhythm
+  -May need new array structure for search
+  -Haptic feedback is being tested
+  -We need to figure out how to upload mp3 files from the user’s phone, not just files saved in app
+4/22/20
+ -Initial algorithm is buggy, but produces some results,
+4/26/20
+  -Uploading songs is being fixed
+  -Making algorithm adjustments, tighten up accuracy
+4/27/20
+  -Final bug fixing
+  -Lots of merge conflicts
+  -Added settings, haptics, volume control to main version
+  -Adding algorithm into app having issues, accessing songs on phone is having difficulty
+  -Opting to add results of algorithm running as hardcoded levels
