@@ -25,6 +25,8 @@ package core.be.tarsos.dsp;
 
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+
+import core.be.tarsos.AndroidFFMPEGLocator;
 import core.be.tarsos.dsp.AudioDispatcher;
 import core.be.tarsos.dsp.io.PipedAudioStream;
 import core.be.tarsos.dsp.io.TarsosDSPAudioFormat;

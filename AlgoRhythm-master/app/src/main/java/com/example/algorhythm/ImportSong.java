@@ -24,6 +24,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import core.be.tarsos.AndroidFFMPEGLocator;
+
+
 public class ImportSong extends AppCompatActivity {
 
     public static TextView title;
@@ -71,6 +74,7 @@ public class ImportSong extends AppCompatActivity {
 
         create.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                new AndroidFFMPEGLocator(getApplicationContext());
                 if(ImportSong.path.equals("")) {
                     ImportSong.title.setText("");
                     ImportSong.songName = "";
