@@ -19,9 +19,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import core.be.tarsos.AndroidFFMPEGLocator;
@@ -84,22 +86,25 @@ public class ImportSong extends AppCompatActivity {
                     finish();
                 } else {
                     Algorhythm.importSong(songName);
-                    Algorhythm.songString();
+                    //Algorhythm.songString();
 
                     try {
-                        FileOutputStream fs = new FileOutputStream(songName);
-                        fs.write(Algorhythm.songString().getBytes());
-                        fs.close();
+                        //FileOutputStream fs = new FileOutputStream(songName);
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(songName + ".txt"));
+                        //fs.write(Algorhythm.songString().getBytes());
+                        //fs.close();
+                        writer.write(Algorhythm.songString());
+                        writer.close();
                     } catch (IOException e) {
                         System.err.println("File output failed.");
                     }
 
                     try {
-                        SongItem song = new SongItem(ImportSong.songName, 2, duration, "sea_shanty_2", ImportSong.path);
+                        SongItem song = new SongItem(ImportSong.songName, 2, duration, songName + ".txt", ImportSong.path);
                         SongSelect.jobItems.add(song);
                         finish();
                     } catch(Exception e) {
-                        SongItem song = new SongItem(ImportSong.songName, 2, duration, "sea_shanty_2", ImportSong.path);
+                        SongItem song = new SongItem(ImportSong.songName, 2, duration, songName + ".txt", ImportSong.path);
                         TitleScreen.tempArray.add(song);
                         finish();
                     }
