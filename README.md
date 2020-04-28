@@ -1,4 +1,17 @@
 # TeamA
+Sprint 2:
+Our game is mostly functional, but it just has 4 default songs.
+We have an algorithm working to some extent, but we could not import it into Android Studio to work along with our app, so we used it externally to create a default library.
+Sea Shanty 2 is the short one for testing purposes, Sea Shanty 2 Hard... is the one we created through the algorithm, and the other 2 are more intense songs also made with the algorithm.
+Here are some differences from our wireframe.
+Our rhythm meter does not use a gradient, as getting a custom style took a lot of time and we couldn’t figure out how to get a 3 color gradient.
+Hold notes were too hard to generate programatically in the algorithm, and hard to store in text files, so we left them out for now.
+We didn't include a pause function - android functionality doesn’t allow a straight up pause given the way we built our app, but restarting a song is doable. Might be possible, but would require major refactoring
+The edit button requires a level editor, so we didn’t include it in song select.
+Sound effects for tapping and such are not included, as we decided it takes away too much from the song.
+The store page is a stretch goal, and we didn’t get to it. So, the button doesn’t lead anywhere.
+
+Sprint 1:
 So far, our app mainly only covers core gameplay features.
 We have a title screen that links to a song selection of two hardcoded in songs, the first of which, Sea Shanty 2, gives us a proper level, while the second is more of a barebones test level.
 Our song list will expand and show info on high score and combo, as well as being able to be started and deleted, while ranking is not implemented yet.
