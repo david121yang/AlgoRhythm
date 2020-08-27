@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,9 +36,10 @@ public class TitleScreen extends AppCompatActivity {
     }
 
     public void goToImportSong(View view) {
-        Intent intent = new Intent(TitleScreen.this, ImportSong.class);
+        //Intent intent = new Intent(TitleScreen.this, ImportSong.class);
         //Intent intent = new Intent(TitleScreen.this, AddSong.class);
-        startActivity(intent);
+        //startActivity(intent);
+        Toast.makeText(getApplicationContext(), "Feature Not Yet Implemented. Coming Soon.", Toast.LENGTH_SHORT).show();
     }
 
     public void goToSettings(View view) {

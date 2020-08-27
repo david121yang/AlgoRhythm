@@ -71,7 +71,16 @@ public class SongSelect extends AppCompatActivity  {
             for(SongItem item : TitleScreen.tempArray) {
                 jobItems.add(item);
             }
+        } else {
+            jobItems.clear();
+            jobItems.addAll(searchedItems);
+            //jobItems = searchedItems;
         }
+
+        searchedItems = new ArrayList<SongItem>();
+        searchedItems.addAll(jobItems);
+        //searchedItems = jobItems;
+
         // make array adapter to bind arraylist to listview with new custom item layout
 
         orderSongs();
